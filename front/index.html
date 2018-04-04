@@ -4,17 +4,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <title>Hub Archive</title>
   </head>
   <body class="container">
+    <div id="header">
     <h1 class="text-center display-3">Archive</h1>
+    <img src="https://orig00.deviantart.net/abff/f/2014/309/1/0/power_symbol_gif_by_s4u1-d85f6f9.gif">
+    </div>
     <from id="navigation">
-        <button type="click" class="btn btn-primary" disabled>Genres</button>
-        <button type="click" class="btn btn-primary" disabled>Browse Archive</button>
+
+      <div id="navButtons">
+        <button type="click" class="btn btn-primary" >Genres</button>
+        <button type="click" class="btn btn-primary" >Browse Archive</button>
         <button type="click" class="btn btn-primary" disabled>My Stories</button>
         <button type="click" class="btn btn-primary" disabled>Saved Works</button>
+      </div>
+
+      <div id="searchbar">
+        <button type="submit" id="findButton" class="btn btn-primary" >search</button>
         <input type="text" placeholder="search" id="find" class="form-control my-1" autocomplete="off" required>
-        <button type="submit" class="btn btn-primary" disabled>search</button>
+      </div>
     </form>
     <main id="stories">
       <p class="loading">Loading Stories...</p>
@@ -22,7 +32,7 @@
     <form id="new">
       <input type="text" placeholder="Add a story?" id="claim" class="form-control my-1" autocomplete="off" required disabled>
       <textarea placeholder="Summary" id="summary" class="form-control my-1" required disabled></textarea>
-      <button type="submit" class="btn btn-primary" disabled>Submit</button>
+      <button type="submit" class="btn btn-primary" disabled>Create</button>
     </form>
     <footer class="bg-dark fixed-bottom p-2">
       <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>

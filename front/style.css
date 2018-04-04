@@ -1,0 +1,42 @@
+
+#header{
+  height: 10%;
+}
+h1{
+  float: right;
+  width: 92.2%;
+  height: 20%;
+  background-color: #8ced96;
+  box-sizing: border-box;
+}
+img{
+  width: 7.8%;
+    box-sizing: border-box;
+}
+
+#navigation{
+  width: 100%;
+  box-sizing: border-box;
+}
+#navButtons{
+  float: left;
+  width: 50%;
+  overflow: auto;
+    box-sizing: border-box;
+}
+#searchbar{
+  float:right;
+  overflow: auto;
+  width: 50%;
+  box-sizing: border-box;
+}
+#findButton{
+  float: right;
+  width:20%;
+  box-sizing: border-box;
+}
+#find{
+  float: right;
+  width: 50%;
+  box-sizing: border-box;
+}
