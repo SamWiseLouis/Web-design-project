@@ -1,0 +1,9 @@
+Features due by 4/16:
+ 1) Home page that lists all stories in some default order.
+ 2) Story page where you can read a story.
+ 3) Author page that shows an author's bio and lists all stories written by that author.
+ 4) Ability to log in and log out.
+
+Sample data you'll probably need to demonstrate these features:
+- An authors collection (with a couple of authors)
+- A stories collection (with a handful of stories)
