@@ -7,8 +7,8 @@ let db = null;
 const mongodb = require('mongodb');
 mongodb.MongoClient.connect('mongodb://localhost:27017', function(error, client) {
   if (error) throw error;
-  db = client.db('story');
-  db.opinions = db.collection('stories');
+  db = client.db('fiction');
+  db.stories = db.collection('stories');
 });
 
 // get all the stories

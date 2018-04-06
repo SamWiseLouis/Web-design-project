@@ -68,15 +68,15 @@
           $('#log').attr('href', '/logout').text('Log out');
           $('#new :input').prop('disabled', false); // Enable submit form for (var i = 0; i < //for starting the creation of a new story to add to archivength; i++) {
             //for starting the creation of a new story to add to archive
-          }
         }
       });
 
     // Load all stories from the archive
     $.ajax({method: 'GET', url: '/stories'})
-      .fail(() => $('#opinions .loading').text('Could not load archive!'))
+      .fail(() => $('#stories .loading').text('Could not load archive!'))
       .done(function(stories) {
         $('#stories .loading').remove();
+        console.log(stories);
         $('#stories').append(stories.map(story => storyArticle(story)));
       });
 
