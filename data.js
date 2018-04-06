@@ -13,7 +13,7 @@ db.createCollection('stories', {validator: {$and: [
 
 db.createCollection('comments', {validator: {$and: [
   {story_id: {$type: 'objectId', $ne: ''}},
-  {chapter_id: {$type: 'objectId', $ne: ''}}
+  {chapter_id: {$type: 'objectId', $ne: ''}},
   {body: {$type: 'string', $ne: ''}},
   {'author.id': {$type: 'string', $ne: ''}},
   {'author.name': {$type: 'string', $ne: ''}}
