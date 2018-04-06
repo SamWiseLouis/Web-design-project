@@ -10,7 +10,7 @@
   <body class="container">
 
     <div id="header">
-    <h1 class="text-center display-3" width="100%">Archive</h1>
+    <h1 class="text-center display-3" width="100%"><b>Archive</b></h1>
     <img src="https://orig00.deviantart.net/abff/f/2014/309/1/0/power_symbol_gif_by_s4u1-d85f6f9.gif">
     </div>
     <from id="navigation">
@@ -66,11 +66,13 @@
       .done(function(user) {
         if (user) {
           $('#log').attr('href', '/logout').text('Log out');
-          $('#new :input').prop('disabled', false); // Enable submit form for (var i = 0; i < //for starting the creation of a new story to add to archivength; i++) {
-            //for starting the creation of a new story to add to archive
+          $('#new :input').prop('disabled', false);
+          navButtons.each.prop('disabled, false'); 
+          // Enable submit form for (var i = 0; i < //for starting the creation of a new story to add to archivength; i++) {
+          //for starting the creation of a new story to add to archive
+          //need to enable all the other disabled buttons
           }
-        }
-      });
+        });
 
     // Load all stories from the archive
     $.ajax({method: 'GET', url: '/stories'})
@@ -99,7 +101,7 @@
         .fail(() => alert('Could not submit!'))
         .done(function(opinion) {
           $('#stories').append(storyArticle(story));
-          form.reset();
+          form.reset(); //update the form
         });
     });
     </script>

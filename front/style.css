@@ -1,12 +1,17 @@
-
+body{
+  background-color: #617568;
+}
 #header{
   height: 10%;
+  border: 5px solid black;
+  box-sizing: border-box;
+  border-radius: 1%;
 }
 h1{
   float: right;
   width: 92.2%;
   height: 20%;
-  background-color: #8ced96;
+  background-color: #37be64;
   box-sizing: border-box;
 }
 img{
