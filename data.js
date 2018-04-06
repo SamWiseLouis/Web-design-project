@@ -7,6 +7,7 @@ db.createCollection('stories', {validator: {$and: [
   {'author.id': {$type: 'string', $ne: ''}},
   {'author.name': {$type: 'string', $ne: ''}},
   {title: {$type: 'string', $ne: ''}},
+  {summary: {$type: 'string'}}, // can be no summary if person chooses
   {chapters: {$type: 'array'}},
   {favorites: {$type: 'array'}}  // array of people who have favorited this story
 ]}});
@@ -15,6 +16,7 @@ db.createCollection('comments', {validator: {$and: [
   {story_id: {$type: 'objectId', $ne: ''}},
   {chapter_id: {$type: 'objectId', $ne: ''}}
   {body: {$type: 'string', $ne: ''}},
+
   {'author.id': {$type: 'string', $ne: ''}},
   {'author.name': {$type: 'string', $ne: ''}}
 ]}});
