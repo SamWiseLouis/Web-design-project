@@ -54,7 +54,7 @@ server.get('/auth', passport.authenticate('google', {scope: ['profile']}));
 
 // After login, send the user to the URL they were at before
 server.get('/auth/callback', passport.authenticate('google'),
-  (request, response) => response.redirect(request.headers.referer)
+  (request, response) => response.redirect(request.headers.referer || '/')
 );
 
 // Route for returning the logged-in user
@@ -63,7 +63,7 @@ server.get('/user', (request, response) => response.send(request.user));
 // Logout route
 server.get('/logout', function(request, response) {
   request.logout();
-  response.redirect(request.headers.referer);
+  response.redirect(request.headers.referer || '/');
 });
 
 // Error handling
