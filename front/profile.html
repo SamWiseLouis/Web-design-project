@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+  <body>
+    <h1 id="header"></h1>
+    <div id="bio"></div>
+    <div id="stories"></div>
+  </body>
+  <footer class="bg-dark fixed-bottom p-2">
+    <a href="/" class="text-white float-left">Back to all opinions</a>
+    <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+  const author_id = new URLSearchParams(window.location.search).get('author');
+  $.ajax({method: 'GET', url: '/user'})
+    .done(function(user) {
+      // Make a few changes to the page if so
+      if (user) {
+        $('#log').attr('href', '/logout').text('Log out');
+        $('#new :input').prop('disabled', false);
+      }
+
+      if (author_id) {
+        $.ajax({method: 'GET', url: '/profiles/' + author_id})
+          .done(function(profile) {
+            console.log(profile);
+          });
+      }
+    });
+
+  </script>
+</html>
