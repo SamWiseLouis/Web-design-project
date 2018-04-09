@@ -2,27 +2,31 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <title>CreateStory</title>
   </head>
-  <body class="container">
+  <body class="container" text-center>
+    <!--<div id="chapterOptions" style="background-color:#404040"> -->
 
   <!-- this page should only show up to the author of a story or to somone who is making a new story-->
     <!--ergo must be logged in to have gotten here or must be author => implies that you have logged in-->
-    <div id="chapterSelect">
+    <div id="chapterOptions" >
         <!-- need to find a way to link the title of the page to the storys name-->
     <h1 class="text-center display-3" width="100%"><b>Editor</b></h1>
-    <select>
-
+    <center>
+    <!-- will make a loop so that upon page load this slector will add the number of chapters the story has to the options -->
+    <select id="chapterSelector" text-center>
       <option value="" disabled="disabled" selected="selected">Chapter</option>
       <!-- here i need to axcess from the story the number of chapters and the writing associated with each chapter -->
-      <option value="1">One</option>
-      <option value="2">Two</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
     </select>
-    <button type="click" class="btn btn-primary" >Add Chapter</button>
-    <button type="click" class="btn btn-primary" >save Chapter</button>
+
+    <button id="chapterAdd"  type="click" class="btn btn-primary" >Add Chapter</button>
+    <button id="chapterSave" type="click" class="btn btn-primary" >save Chapter</button>
+    </center>
     </div>
 
     <main id="Chapter">
@@ -37,10 +41,22 @@
     <footer class="bg-dark fixed-bottom p-2">
       <a href="/" class="text-white float-left">Back to Archive</a>
     </footer>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     // this is where the story being made will be added to the database
+
+    $('#chapterAdd').on('click', function(event) {
+      event.preventDefault();
+      const selector = document.getElementById('chapterSelector');
+      var x = selector.options.length;
+      const option = document.createElement('option');
+      option.value = option.text = ("Chapter"+" "+x);
+      selector.add(option)
+      console.log("chapter added")
+    });
+
+
 
     </script>
   </body>
