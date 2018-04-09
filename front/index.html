@@ -10,13 +10,13 @@
   <body class="container">
 
     <div id="header">
-    <h1 class="text-center display-3" width="100%"><b>Archive</b></h1>
-    <img src="https://orig00.deviantart.net/abff/f/2014/309/1/0/power_symbol_gif_by_s4u1-d85f6f9.gif">
+      <h1 class="text-center display-3" width="100%"><b>Archive</b></h1>
+      <img src="https://orig00.deviantart.net/abff/f/2014/309/1/0/power_symbol_gif_by_s4u1-d85f6f9.gif">
     </div>
-    <from id="navigation">
+    <form id="navigation">
       <div id="navButtons">
-        <button type="click" class="btn btn-primary" >Genres</button>
-        <button type="click" class="btn btn-primary" >Browse Archive</button>
+        <button type="click" class="btn btn-primary">Genres</button>
+        <button type="click" class="btn btn-primary">Browse Archive</button>
         <button type="click" class="btn btn-primary" disabled>My Stories</button>
         <button type="click" class="btn btn-primary" disabled>Saved Works</button>
       </div>
@@ -50,7 +50,7 @@
         <article class="card my-3">
           <div class="card-header">
             <a href="discussion?topic=${story.title}">${story.title}</a>
-              <span class="badge badge-pill badge-dark">${story.author.name}</span>
+              <span class="badge badge-pill badge-dark"><a href="profile?author=${story.author.id}">${story.author.name}</a></span>
           </div>
           <div class="card-body">
             <p>${story.summary}</p>
@@ -80,7 +80,6 @@
       .fail(() => $('#stories .loading').text('Could not load archive!'))
       .done(function(stories) {
         $('#stories .loading').remove();
-        console.log(stories);
         $('#stories').append(stories.map(story => storyArticle(story)));
       });
 
