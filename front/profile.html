@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   </head>
   <body>
-    <header id="header"></header>
-    <div id="stories">
+    <header id="header" class="mx-3 mt-3"></header>
+    <div id="stories" class="mx-3">
         <div class="card" style="width: 30rem;">
-          <h4>My Stories</h4>
+          <h4 class="card-header">My Stories</h4>
         </div>
     </div>
   </body>
@@ -22,9 +22,9 @@
 
   const profileHeader = function(profile) {
     return $(`
-      <div class="card mb-3" style="width: 450rem;">
-        <h3 class="card-title">${profile.author.name}</h3>
-        <p class="card-text">${profile.desc}</p>
+      <div class="card mb-3" style="width: 45rem;">
+        <h3 class="card-header">${profile.author.name}</h3>
+        <p class="card-text mx-3">${profile.desc}</p>
       </div>
     `);
   };
@@ -32,7 +32,7 @@
   const profileStories = function(story) {
     return $(`
       <div class="card my-2" style="width: 30rem;">
-        <h5 class="card-title">${story.title}</h5>
+        <h5 class="card-title"><a href="story?id=${story._id}">${story.title}</a></h5>
         <p class="card-text">${story.summary}</p>
       </div>
     `);
