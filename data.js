@@ -42,10 +42,10 @@ const short = db.stories.insertOne({
   favorites: []
 });
 
-const guin = db.profiles.insertOne({
+db.profiles.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
   desc: "This is my profile.",
-  story_ids: [long.insertId]
+  story_ids: [long.insertedId]
 });
 
 db.profiles.createIndex({author: 1});
