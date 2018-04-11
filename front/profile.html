@@ -7,7 +7,6 @@
   </head>
   <body>
     <header id="header"></header>
-    <div id="bio"></div>
     <div id="stories"></div>
   </body>
   <footer class="bg-dark fixed-bottom p-2">
@@ -19,22 +18,23 @@
 
   const profileHeader = function(profile) {
     return $(`
-      <div class="card">
-        <h3>${profile.author.name}</h3>
+      <div class="card" style="width: 30rem;">
+        <h3 class="card-title">${profile.author.name}</h3>
+        <p class="card-text">${profile.desc}</p>
       </div>
     `);
   };
 
-  const profileBio = function(profile) {
-    return $(`
-
-    `);
-  };
-
-  const profileStories = function(profile) {
-    return $(`
-
-    `);
+  const profileStories = function(story_id) {
+    $.ajax({method: 'GET', url: `/stories/${story_id}`})
+      .done(function(story) {
+        return $(`
+          <div class="card" style="width: 30rem;">
+            <h2 class="card-title">${story.title}</h3>
+            <p class="card-text">${story.summary}</p>
+          </div>
+        `);
+      });
   };
 
   const author_id = new URLSearchParams(window.location.search).get('author');
@@ -50,6 +50,11 @@
         $.ajax({method: 'GET', url: `/profiles/${author_id}`})
           .done(function(profile) {
             $('#header').append(profileHeader(profile));
+            console.log(profile.story_ids);
+            for (story of profile.story_ids) {
+              console.log(story);
+              $('#stories').append(profileStories(story));
+            }
           });
       }
     });
