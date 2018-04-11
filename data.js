@@ -12,15 +12,6 @@ db.createCollection('stories', {validator: {$and: [
   {favorites: {$type: 'array'}}  // array of people who have favorited this story
 ]}});
 
-db.createCollection('comments', {validator: {$and: [
-  {story_id: {$type: 'objectId', $ne: ''}},
-  {chapter_id: {$type: 'objectId', $ne: ''}},
-  {body: {$type: 'string', $ne: ''}},
-
-  {'author.id': {$type: 'string', $ne: ''}},
-  {'author.name': {$type: 'string', $ne: ''}}
-]}});
-
 db.createCollection('profiles', {validator: {$and: [
   {'author.id': {$type: 'string', $ne: ''}},
   {'author.name': {$type: 'string', $ne: ''}},
@@ -55,4 +46,6 @@ const guin = db.profiles.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
   desc: "This is my profile.",
   stories: [long]
-})
+});
+
+db.profiles.createIndex({author: 1});
