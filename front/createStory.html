@@ -14,8 +14,10 @@
     <!--ergo must be logged in to have gotten here or must be author => implies that you have logged in-->
 
     <!-- need to find a way to link the title of the page to the storys name-->
-    <h1 id="header" class="text-center display-3"><b>Editor</b></h1>
-    
+    <h1 id="header" class="text-center display-3"><b>Story Editor</b></h1>
+
+
+
     <h2 id="chapter_title" >Chapter Title</h2>
     <!-- here is where the chapter summary will be loaded and added to-->
 
@@ -47,17 +49,30 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-    // this is where the story being made will be added to the database
+    // this is where the story editor will teather to the story clicked and actually allow editing and chapter to be grabbed
+
+      $.ajax({method: 'GET', url: '/stories? /Id'})
+      .done(function(stories) {
+          
+      }
+
+
+
+
 
     // can manually add new chapters
-    $('#chapterAdd').on('click', function(event) {
-      event.preventDefault();
+    $('#chapterAdd').on('click', function() {
       const selector = document.getElementById('chapterSelector');
       var x = selector.options.length;
       const option = document.createElement('option');
       option.value = option.text = ("Chapter"+" "+x);
       selector.add(option)
       console.log("chapter added")
+    });
+    // when a chapter is selected change the text box to the database.array[x] text
+    $('#chapterSelector').on('section', fuction(event){
+      event.preventDefault();
+      aj
     });
 
 
