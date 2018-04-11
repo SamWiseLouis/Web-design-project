@@ -51,14 +51,24 @@
     <script>
     // this is where the story editor will teather to the story clicked and actually allow editing and chapter to be grabbed
 
-      $.ajax({method: 'GET', url: '/stories? /Id'})
-      .done(function(stories) {
-          
+
+    //automatically generate the right number of chapters according to the story saved in database
+  const id = new URLSearchParams(window.location.search).get('ID');
+  console.log(id)
+    // get the story by the id
+    $.ajax({method: 'GET', url: `/stories/${id}`})
+    .done(function(story){
+      if(story)
+      console.log(story);
+      for (var i = 0; i < story.chapters.length; i++) {
+        const selector = document.getElementById('chapterSelector');
+        var x = selector.options.length;
+        const option = document.createElement('option');
+        option.value = option.text = ("Chapter"+" "+x);
+        selector.add(option)
+        console.log("appended chapters to chapter selector")
       }
-
-
-
-
+    });
 
     // can manually add new chapters
     $('#chapterAdd').on('click', function() {
@@ -70,9 +80,15 @@
       console.log("chapter added")
     });
     // when a chapter is selected change the text box to the database.array[x] text
-    $('#chapterSelector').on('section', fuction(event){
-      event.preventDefault();
-      aj
+    $('#chapterSelector').on('select', function(){
+      const selector = $(this);
+      $.ajax({method: 'GET', url: `/stories/${id}`})
+      .done(function(story){
+        if(story)
+          var x = selector.options[selector.selectedIndex].value;
+          console.log(x);
+          const chapterText = story.chapters[x];
+        });
     });
 
 

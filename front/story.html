@@ -51,12 +51,12 @@ $.ajax({method: 'GET', url: '/user'})
 
       }
     });
-    // Get the opinion ID for this page out of the URL
+    // Get the story ID for this page out of the URL
     const topic = new URLSearchParams(window.location.search).get('topic');
 
-    // Load the opinion from the database
+    // Load the story from the database
     $.ajax({method: 'GET', url: `/stories/${topic}`})
-      .fail(() => $('#stories .loading').text('Could not load opinion!'))
+      .fail(() => $('#stories .loading').text('Could not load story!'))
       .done(function(story) {
         $('#opinion .loading').remove();
         $('#opinion').append(opinionHeader(story).children());
