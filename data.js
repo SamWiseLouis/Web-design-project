@@ -21,7 +21,7 @@ db.createCollection('profiles', {validator: {$and: [
 
 // test data
 const long = db.stories.insertOne({
-  author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
+  author: {id: '103655908568409015936', name: 'Guin'},
   title: "Long Story",
   summary: "The coolest story ever written.",
   chapters: [

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html text-white>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -26,14 +26,20 @@
         <input type="text" placeholder="search" id="find" class="form-control" autocomplete="off" required>
       </div>
     </form>
+
+    <!-- this is where the archive will display all the stories -->
     <main id="stories">
       <p class="loading">Loading Stories...</p>
     </main>
-    <form id="new">
+
+    <!-- this is where a new story can start to be made
+    Will only initally have a title and then sent to the create story page -->
+    <form id="new_Story">
       <input type="text" placeholder="Add a story?" id="title" class="form-control my-1" autocomplete="off" required disabled>
-      <textarea placeholder="Summary" id="summary" class="form-control my-1" required disabled></textarea>
-      <button type="submit" class="btn btn-primary" disabled>Create</button>
+      <button type="submit" class="btn btn-primary" disabled<a href="stories?story=${story_id}"></a>Create</button>
     </form>
+
+    <!-- Login logout stuff-->
     <footer class="bg-dark fixed-bottom p-2">
       <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
     </footer>
@@ -49,8 +55,10 @@
       return $(`
         <article class="card my-3">
           <div class="card-header">
-            <a href="discussion?topic=${story.title}">${story.title}</a>
-              <span class="badge badge-pill badge-dark"><a href="profile?author=${story.author.id}">${story.author.name}</a></span>
+
+            <a href="/createStory?${story.title}">${story.title}</a>
+              <span class="badge badge-pill badge-dark">${story.author.name}</span>
+
           </div>
           <div class="card-body">
             <p>${story.summary}</p>
@@ -66,12 +74,9 @@
       .done(function(user) {
         if (user) {
           $('#log').attr('href', '/logout').text('Log out');
-
-          $('#new :input').prop('disabled', false);
-          navButtons.each.prop('disabled, false');
-          // Enable submit form for (var i = 0; i < //for starting the creation of a new story to add to archivength; i++) {
-          //for starting the creation of a new story to add to archive
-          //need to enable all the other disabled buttons
+          $('#new_Story :input').prop('disabled', false);
+          $('#new_Story :button').prop('disabled', false);
+          $('#navButtons :button').prop('disabled', false); //undisable the nav bar
           }
         });
 
@@ -85,18 +90,22 @@
 
     // Handle form submit to start the creation of a new story
     // upon this creation the autho will be sent to a new page
-    $('#new').on('submit', function(event) {
+    $('#new_Story').on('submit', function(event) {
       event.preventDefault();
-      const user = request.user();
-      const story = {
-        'author_id': user.id(),
-        'author.name':user.name(), //not sure how to get name but should get id
-        title: $('#title').val().trim(),
-        summary: $('#summary').val().trim(),
+      $.ajax({method: 'GET', url: '/user'})
+        .done(function(user) {
+        self = user;  //get the user
+        // now lets make a new story to add to database
+        const story = {
+        'author_id': self.id,
+        'author.name': self.name, //not sure how to get name but should get id
+        title: $('submit').val().trim(),
+        summary: "blank",
         chapters: [], // the person will add chapters in a new page
         favorites: [] // will start out at zero "likes"
-
-      };
+      }
+    });
+      // then add the new story to the database
       const form = this;
       $.ajax({method: 'POST', url: '/stories', data: story})
         .fail(() => alert('Could not submit!'))
@@ -104,7 +113,11 @@
           $('#stories').append(storyArticle(story));
           form.reset(); //update the form
         });
-    });
+        // then person should get sent to create story page of that created Story
+  });
+
+
+
     </script>
   </body>
 </html>
