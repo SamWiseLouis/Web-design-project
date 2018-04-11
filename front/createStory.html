@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="storyStyle.css">
     <title>CreateStory</title>
   </head>
   <body class="container" text-center>
@@ -12,18 +12,21 @@
 
   <!-- this page should only show up to the author of a story or to somone who is making a new story-->
     <!--ergo must be logged in to have gotten here or must be author => implies that you have logged in-->
-    <div id="chapterOptions" >
-        <!-- need to find a way to link the title of the page to the storys name-->
-    <h1 class="text-center display-3" width="100%"><b>Editor</b></h1>
+
+    <!-- need to find a way to link the title of the page to the storys name-->
+    <h1 id="header" class="text-center display-3"><b>Editor</b></h1>
+    
+    <h2 id="chapter_title" >Chapter Title</h2>
+    <!-- here is where the chapter summary will be loaded and added to-->
+
+
+    <div id="chapterOptions" width="100%" >
     <center>
     <!-- will make a loop so that upon page load this slector will add the number of chapters the story has to the options -->
-    <select id="chapterSelector" text-center>
-      <option value="" disabled="disabled" selected="selected">Chapter</option>
+    <select id="chapterSelector">
+    <option value="" disabled="disabled" selected="selected">Chapter</option>
       <!-- here i need to axcess from the story the number of chapters and the writing associated with each chapter -->
-      <option value="1">1</option>
-      <option value="2">2</option>
     </select>
-
     <button id="chapterAdd"  type="click" class="btn btn-primary" >Add Chapter</button>
     <button id="chapterSave" type="click" class="btn btn-primary" >save Chapter</button>
     </center>
@@ -46,6 +49,7 @@
     <script>
     // this is where the story being made will be added to the database
 
+    // can manually add new chapters
     $('#chapterAdd').on('click', function(event) {
       event.preventDefault();
       const selector = document.getElementById('chapterSelector');
