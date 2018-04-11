@@ -11,9 +11,9 @@ mongodb.MongoClient.connect('mongodb://localhost:27017', function(error, client)
   db.profiles = db.collection('profiles');
 });
 
-// get specific profile
+// get profile by user id
 router.get('/:id', function(request, response, next) {
-  const user_id = request.params.id
+  const user_id = request.params.id;
 
   db.profiles.findOne({'author.id': {$eq: user_id}}, function(error, profile) {
     if (error) return next(error);

@@ -16,7 +16,7 @@ db.createCollection('profiles', {validator: {$and: [
   {'author.id': {$type: 'string', $ne: ''}},
   {'author.name': {$type: 'string', $ne: ''}},
   {desc: {$type: 'string', $ne: ''}},
-  {stories: {$type: 'array'}}  // array of story ids written by this author
+  {story_ids: {$type: 'array'}}  // array of story ids written by this author
 ]}});
 
 // test data
@@ -45,7 +45,7 @@ const short = db.stories.insertOne({
 const guin = db.profiles.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
   desc: "This is my profile.",
-  stories: [long]
+  story_ids: [long.insertId]
 });
 
 db.profiles.createIndex({author: 1});

@@ -21,4 +21,15 @@ router.get('/', function(request, response, next) {
   });
 });
 
+// get story by id
+router.get('/:id', function(request, response, next) {
+  const story_id = {_id: new mongodb.ObjectId(request.params.id)};
+
+  db.stories.findOne(story_id, function(error, story) {
+    if (error) return next(error);
+    if (!story) return next(new Error('Not found'));
+    response.json(story);
+  });
+});
+
 module.exports = router;
