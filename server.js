@@ -8,7 +8,7 @@ server.use(express.urlencoded({extended: true}));
 // Set up sessions to recognize authenticated users
 const session = require('express-session');
 server.use(session({
-  name: 'story', // Cookie name
+  name: 'stories', // Cookie name
   resave: false, // Required option
   saveUninitialized: false, // Required option
   secret: require('../secret'), // Accesses secret.js

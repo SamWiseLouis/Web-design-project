@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   </head>
   <body>
-    <h1 id="header"></h1>
+    <header id="header"></header>
     <div id="bio"></div>
     <div id="stories"></div>
   </body>
@@ -16,6 +16,27 @@
   </footer>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script>
+
+  const profileHeader = function(profile) {
+    return $(`
+      <div class="card">
+        <h3>${profile.author.name}</h3>
+      </div>
+    `);
+  };
+
+  const profileBio = function(profile) {
+    return $(`
+
+    `);
+  };
+
+  const profileStories = function(profile) {
+    return $(`
+
+    `);
+  };
+
   const author_id = new URLSearchParams(window.location.search).get('author');
   $.ajax({method: 'GET', url: '/user'})
     .done(function(user) {
@@ -26,9 +47,9 @@
       }
 
       if (author_id) {
-        $.ajax({method: 'GET', url: '/profiles/' + author_id})
+        $.ajax({method: 'GET', url: `/profiles/${author_id}`})
           .done(function(profile) {
-            console.log(profile);
+            $('#header').append(profileHeader(profile));
           });
       }
     });
