@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="storyStyle.css">
   </head>
   <body>
-    <header id="storyTitle" class="jumbotron">
-      <h1 class="loading">waiting for intern to fix server ... this could take a while..... dammit Kevin</h1>
+    <header id="story" class="jumbotron">
+      <h1 class="loading">loading...</h1>
     </header>
     <main>
     </main>
@@ -24,7 +24,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
 
-    // Generate a header for the opinion
+    // Generate a story
     // then have a bot that holds the tags the genre and the story summary
     const storyHeader = function(story) {
       return $(`
@@ -32,48 +32,51 @@
           <h1>${story.title}</h1>
           <p>${story.author.name}</p>
         </header>
-        <div id="storyInfo">
-          <div class="card">${story.summary}</div>
-          <ul class="list-group">
-            <li id="genreTag" class="list-group-item" style="width: 15rem;">genre</li>
-          </ul>
-        </div>
+    `);
+  };
 
-        <div id="chapterNav">
+  const storyBody = function(story) {
+    return $(`
+      <div id="storyInfo">
+        <div class="card" style="width: 45rem;">
+          <div class="card-header">Summary</div>
+          <div class="card-text">${story.summary}</div>
         </div>
+        <ul class="list-group">
+          <li id="genreTag" class="list-group-item" style="width: 15rem;">genre</li>
+        </ul>
+      </div>
 
-        <div id="storyBody" class="card my-3">
-          <h3 class="card-header">${story.chapters[0].title}</h3>
-          <p class="card-text mx-3">${story.chapters[0].text}</p>
+      <div id="chapterNav" class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle mx-auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown button
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
         </div>
+      </div>
+
+      <div id="storyBody" class="card my-3">
+        <h3 class="card-header">${story.chapters[0].title}</h3>
+        <p class="card-text mx-3">${story.chapters[0].text}</p>
+      </div>
     `);
   };
 
 
-      }
-    });
-    // Get the story ID for this page out of the URL
-    const topic = new URLSearchParams(window.location.search).get('topic');
-
-    // Load the story from the database
-    $.ajax({method: 'GET', url: `/stories/${topic}`})
-      .fail(() => $('#stories .loading').text('Could not load story!'))
-      .done(function(story) {
-        $('#opinion .loading').remove();
-        $('#opinion').append(opinionHeader(story).children());
-
-      });
-      // Get the opinion ID for this page out of the URL
+  // Get the opinion ID for this page out of the URL
   const story_id = new URLSearchParams(window.location.search).get('id');
 
   // Load the story from the database
   $.ajax({method: 'GET', url: `/stories/${story_id}`})
-    .fail(() => $('#stories .loading').text('Could not load opinion!'))
+    .fail(() => $('#story .loading').text('Could not load opinion!'))
     .done(function(story) {
-      $('#storyTitle .loading').remove();
-      $('#storyTitle').append(storyHeader(story));
+      $('#story .loading').remove();
+      $('#story').append(storyHeader(story));
+      $('main').append(storyBody(story));
     });
-
 
     </script>
   </body>
