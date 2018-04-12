@@ -21,7 +21,7 @@ db.createCollection('profiles', {validator: {$and: [
 
 // test data
 const long = db.stories.insertOne({
-  author: {id: '103655908568409015936', name: 'Guin'},
+  author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
   title: "Long Story",
   summary: "The coolest story ever written.",
   chapters: [
@@ -42,10 +42,16 @@ const short = db.stories.insertOne({
   favorites: []
 });
 
-const guin = db.profiles.insertOne({
+db.profiles.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
-  desc: "This is my profile.",
-  story_ids: [long.insertId]
+  desc: "This is my profile. I don't have much to say, because my stories should speak for themselves. I only have one so far, but it's pretty amazing.",
+  story_ids: [long.insertedId]
+});
+
+db.profiles.insertOne({
+  author: {id: '100532274667147041257', name: 'Samuel Emerson'},
+  desc: "I have a lot of good stories to share. If you like my stories, please consider favoriting them. Also follow me for more updates! Maybe when I'm not working on this project, I can actually write some.",
+  story_ids: [short.insertedId]
 });
 
 db.profiles.createIndex({author: 1});

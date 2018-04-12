@@ -1,11 +1,10 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="storyStyle.css">
-    <title>Story</title>
   </head>
   <body>
     <header id="storyTitle" class="jumbotron">
@@ -13,7 +12,8 @@
     </header>
     <main>
     </main>
-    <form id="new" class="container mb-5">
+    <form id="new" class="container">
+      <h5>Leave a comment</h5>
       <textarea id="argument" placeholder="What do you think?" class="form-control my-1" required></textarea>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -26,28 +26,29 @@
 
     // Generate a header for the opinion
     // then have a bot that holds the tags the genre and the story summary
-    const StoryHeader = function(story) {
+    const storyHeader = function(story) {
       return $(`
         <header>
           <h1>${story.title}</h1>
-          <p>${story.author}</p>
+          <p>${story.author.name}</p>
         </header>
-        <dvi id="storyInfo">
-          <ul>
-            <liid="genreTag">story</li>
+        <div id="storyInfo">
+          <div class="card">${story.summary}</div>
+          <ul class="list-group">
+            <li id="genreTag" class="list-group-item" style="width: 15rem;">genre</li>
           </ul>
         </div>
 
         <div id="chapterNav">
         </div>
-      `);
-    };
 
-// if im not logged in
-$.ajax({method: 'GET', url: '/user'})
-  .done(function(user) {
-    if (user) {
-      $('#log').attr('href', '/logout').text('Log out');
+        <div id="storyBody" class="card my-3">
+          <h3 class="card-header">${story.chapters[0].title}</h3>
+          <p class="card-text mx-3">${story.chapters[0].text}</p>
+        </div>
+    `);
+  };
+
 
       }
     });
@@ -60,7 +61,18 @@ $.ajax({method: 'GET', url: '/user'})
       .done(function(story) {
         $('#opinion .loading').remove();
         $('#opinion').append(opinionHeader(story).children());
+
       });
+      // Get the opinion ID for this page out of the URL
+  const story_id = new URLSearchParams(window.location.search).get('id');
+
+  // Load the story from the database
+  $.ajax({method: 'GET', url: `/stories/${story_id}`})
+    .fail(() => $('#stories .loading').text('Could not load opinion!'))
+    .done(function(story) {
+      $('#storyTitle .loading').remove();
+      $('#storyTitle').append(storyHeader(story));
+    });
 
 
     </script>
