@@ -82,6 +82,11 @@
           // if your the author of a  story then you get sent to storyEditor
           // if not the author then you get sent to story page
           }
+          //now remove buttons
+        if(user != story.author_id){
+          $('#editStory').remove();
+
+        }
         });
 
     // Load all stories from the archive

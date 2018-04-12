@@ -1,17 +1,26 @@
 html{
   overflow: auto;
+  padding: 2%;
 }
 body{
   background-color: #b8b8b8;
+  border: thin solid red;
   overflow: auto;
   height: 100%;
 }
-
 #header{
+  border-radius: 15px;
   text-align: center;
-  border: thin solid black;
-  background-color: #37be64;
-box-sizing: border-box;
+  border: thin 2px red;
+  background-color:  #fff3e6;
+  box-sizing: border-box;
+}
+#subheader{
+  border-radius: 10px;
+  background: #d9d9d9;
+  padding: 3%;
+  width: 33%;
+  text-align: center;
 }
 #chapter_title{
   text-align: center;
@@ -24,6 +33,17 @@ box-sizing: border-box;
 
   box-sizing: border-box;
 }
+.btn{
+  background-color: #b30000;
+}
+
+#chapterSave{
+  float: right;
+}
+#chapterAdd{
+  float: right;
+}
+
 
 #currentChapter{
   width: 100%;
@@ -32,4 +52,8 @@ box-sizing: border-box;
   background: white;
   border: solid thin black;
   box-sizing:border-box;
+}
+#chapterSelector{
+  background-color: #222426;
+  color: white;
 }
