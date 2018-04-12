@@ -1,0 +1,6 @@
+#currentChapter{
+  overflow: auto;
+  height: 70%;
+  border:solid thin black;
+  box-sizing: border-box;
+}

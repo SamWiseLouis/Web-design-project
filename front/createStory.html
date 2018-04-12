@@ -15,9 +15,6 @@
 
     <!-- need to find a way to link the title of the page to the storys name-->
     <h1 id="header" class="text-center display-3"><b>Story Editor</b></h1>
-
-
-
     <h2 id="chapter_title" >Chapter Title</h2>
     <!-- here is where the chapter summary will be loaded and added to-->
 
@@ -37,7 +34,7 @@
     <main id="Chapter">
       <!-- the text should be loader from the chaper if any so the author can edit-->
       <!-- otherwise if new chaper or new story should have placeholder-->
-    <input type="text" placeholder="write a chapter..." id="currentChapter" class="form-control my-1" autocomplete="off" required>
+    <p id="currentChapter" contenteditable="true" overflow="auto">write something...</p>
     <!-- should return the author to the archive and have saved all changes to each chapter in the story-->
     <!-- going to need one hell of a post statement here-->
     <button type="submit" id="findButton" class="btn btn-primary" >publish Update</button>
@@ -66,6 +63,7 @@
         const option = document.createElement('option');
         option.value = option.text = ("Chapter"+" "+x);
         selector.add(option)
+        $('#header').text(story.title);
         console.log("appended chapters to chapter selector")
       }
     });
@@ -79,15 +77,22 @@
       selector.add(option)
       console.log("chapter added")
     });
+
     // when a chapter is selected change the text box to the database.array[x] text
-    $('#chapterSelector').on('select', function(){
+    $('#chapterSelector').on('change', function(){
       const selector = $(this);
       $.ajax({method: 'GET', url: `/stories/${id}`})
       .done(function(story){
         if(story)
-          var x = selector.options[selector.selectedIndex].value;
+          var x = selector.prop("selectedIndex");
           console.log(x);
-          const chapterText = story.chapters[x];
+          const chapterText = story.chapters[x-1].text;
+          const chapterTitle = story.chapters[x-1].title;
+          console.log(chapterText);
+          console.log(chapterTitle);
+        $('#currentChapter').text(chapterText);
+        $('#chapter_title').text(chapterTitle);
+        console.log("done")
         });
     });
 
