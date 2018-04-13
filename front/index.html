@@ -55,12 +55,9 @@
       return $(`
         <article class="card my-3">
           <div class="card-header">
-
             <a href="story?id=${story._id}">${story.title}</a>
             <a href="/createStory?ID=${story._id}" id="editStory">Edit story</a>
-
-              <span class="badge badge-pill badge-dark"><a href="profile?author=${story.author.id}">${story.author.name}</a></span>
-
+            <span class="badge badge-pill badge-dark"><a href="profile?author=${story.author.id}">${story.author.name}</a></span>
           </div>
           <div class="card-body">
             <p>${story.summary}</p>
