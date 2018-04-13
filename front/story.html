@@ -21,7 +21,7 @@
         </ul>
       </div>
 
-      <div id="storyBody" class="card my-4">
+      <div id="storyBody" class="card mt-4">
         <div class="card-header">
           <h3>
             <p id="chapterTitle" class="float-left my-auto"></p>
@@ -31,13 +31,9 @@
           </h3>
         </div>
         <p id="chapterText" class="card-text mx-3"></p>
+        <div id="chapterButtons" class="card-footer"></div>
       </div>
     </main>
-    <form id="new" class="container mb-3">
-      <h5>Leave a comment</h5>
-      <textarea id="argument" placeholder="What do you think?" class="form-control my-1" required></textarea>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
     <footer class="bg-dark fixed-bottom p-2">
       <a href="/" class="text-white float-left">Back to Archive</a>
       <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
@@ -70,9 +66,9 @@
       }
     };
 
-    const chapterMenu = function(number) {
+    const chapterMenu = function(number, chapter) {
       return $(`
-        <option>Chapter ${number}</option>
+        <option>${number}. ${chapter.title}</option>
       `);
     };
 
@@ -80,18 +76,32 @@
     $.ajax({method: 'GET', url: `/stories/${story_id}`})
       .fail(() => $('#story .loading').text('Could not load opinion!'))
       .done(function(story) {
+        if (chapter_number < story.chapters.length) {
+          $('#chapterButtons').append(`<button id="next" class="btn float-right">Next chapter</button>`);
+        }
+        if (chapter_number !== '1') {
+          $('#chapterButtons').append(`<button id="prev" class="btn float-left">Previous chapter</button>`);
+        }
         $('#story .loading').remove();
         $('#story').append(storyHeader(story));
         storyBody(story, story.chapters[chapter_number - 1]);
         let count = 1;
         for (chapter of story.chapters) {
-          $('#chapterNav').append(chapterMenu(count));
+          $('#chapterNav').append(chapterMenu(count, chapter));
           count++;
         }
     });
 
     $('#chapterNav').on('change', function(){
       $(location).attr('href', `story?id=${story_id}&chapter=${$(this).prop("selectedIndex")}`);
+    });
+
+    $('#chapterButtons').on('click', 'button', function() {
+      if ($(this).attr('id') === 'next') {
+        $(location).attr('href', `story?id=${story_id}&chapter=${parseInt(chapter_number) + 1}`);
+      } else {
+        $(location).attr('href', `story?id=${story_id}&chapter=${parseInt(chapter_number) - 1}`);
+      }
     });
 
     </script>
