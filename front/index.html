@@ -8,12 +8,10 @@
     <title>Hub Archive</title>
   </head>
   <body class="container">
-
     <div id="header">
       <h1 class="text-center display-3" width="100%"><b>Archive</b></h1>
-      <img src="https://media.giphy.com/media/K3kR9EZj8Uwk8/giphy.gif">
     </div>
-    <form id="navigation">
+    <form id="navigation" class="my-2">
       <div id="navButtons">
         <button type="click" class="btn btn-primary">Genres</button>
         <button type="click" class="btn btn-primary">Browse Archive</button>
@@ -29,15 +27,8 @@
 
     <!-- this is where the archive will display all the stories -->
     <main id="stories">
-      <p class="loading">Loading Stories...</p>
+      <p class="loading">Loading stories...</p>
     </main>
-
-    <!-- this is where a new story can start to be made
-    Will only initally have a title and then sent to the create story page -->
-    <form id="new_Story">
-      <input type="text" placeholder="Add a story?" id="title" class="form-control my-1" autocomplete="off" required disabled>
-      <button type="submit" class="btn btn-primary" disabled<a href="stories?story=${story_id}"></a>Create</button>
-    </form>
 
     <!-- Login logout stuff-->
     <footer class="bg-dark fixed-bottom p-2">
@@ -56,7 +47,6 @@
         <article class="card my-3">
           <div class="card-header">
             <a href="story?id=${story._id}">${story.title}</a>
-            <a href="/createStory?ID=${story._id}" id="editStory">Edit story</a>
             <span class="badge badge-pill badge-dark"><a href="profile?author=${story.author.id}">${story.author.name}</a></span>
           </div>
           <div class="card-body">

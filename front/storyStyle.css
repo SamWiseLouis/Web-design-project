@@ -38,6 +38,12 @@ body{
 }
 a{
   color: #8c1580;
+  text-decoration: none;
+}
+
+a:hover{
+  color: #e2a8ff;
+  text-decoration: none;
 }
 
 #story{
