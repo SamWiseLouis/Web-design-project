@@ -4,20 +4,20 @@ html{
 }
 body{
   background-color: #b8b8b8;
-  border: thin solid red;
+  border: thick solid purple;
   overflow: auto;
   height: 100%;
 }
 #header{
   border-radius: 15px;
   text-align: center;
-  border: thin 2px red;
-  background-color:  #fff3e6;
+  border: thick 2px purple;
+  background-color:  #f2f2f2;
   box-sizing: border-box;
 }
 #subheader{
   border-radius: 10px;
-  background: #d9d9d9;
+  background: #f2f2f2;
   padding: 3%;
   width: 33%;
   text-align: center;
@@ -29,12 +29,19 @@ body{
 #chapterOptions{
   width: 100%;
   text-align: center;
-  border: thin solid black;
+  border: thick solid black;
 
   box-sizing: border-box;
 }
 .btn{
-  background-color: #b30000;
+  background-color: #8c1580;
+}
+a{
+  color: #8c1580;
+}
+
+#story{
+  background: #f2f2f2;
 }
 
 #chapterSave{
@@ -50,7 +57,7 @@ body{
   height: 400px ;
   overflow: auto;
   background: white;
-  border: solid thin black;
+  border: solid thick black;
   box-sizing:border-box;
 }
 #chapterSelector{

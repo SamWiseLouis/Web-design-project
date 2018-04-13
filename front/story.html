@@ -12,7 +12,7 @@
     </header>
     <main>
     </main>
-    <form id="new" class="container">
+    <form id="new" class="container mb-3">
       <h5>Leave a comment</h5>
       <textarea id="argument" placeholder="What do you think?" class="form-control my-1" required></textarea>
       <button type="submit" class="btn btn-primary">Submit</button>
@@ -22,7 +22,14 @@
       <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script>
+    // Get the opinion ID for this page out of the URL
+    const story_id = new URLSearchParams(window.location.search).get('id');
+    let chapter_number = new URLSearchParams(window.location.search).get('chapter');
+    if (!chapter_number) {  // default to the first chapter
+      chapter_number = '1';
+    }
 
     // Generate a story
     // then have a bot that holds the tags the genre and the story summary
@@ -30,52 +37,60 @@
       return $(`
         <header>
           <h1>${story.title}</h1>
-          <p>${story.author.name}</p>
+          <p><a href="profile?author=${story.author.id}">${story.author.name}</a></p>
         </header>
-    `);
-  };
+      `);
+    };
 
-  const storyBody = function(story) {
-    return $(`
-      <div id="storyInfo">
-        <div class="card" style="width: 45rem;">
-          <div class="card-header">Summary</div>
-          <div class="card-text">${story.summary}</div>
+    const storyBody = function(story, chapter) {
+      return $(`
+        <div id="storyInfo">
+          <div class="card mx-5 my-3">
+            <h3 class="card-header">Summary</h3>
+            <p class="card-text mx-3">${story.summary}</p>
+          </div>
+          <ul class="list-group mx-5 my-3">
+            <li id="genreTag" class="list-group-item" style="width: 15rem;">genre</li>
+          </ul>
         </div>
-        <ul class="list-group">
-          <li id="genreTag" class="list-group-item" style="width: 15rem;">genre</li>
-        </ul>
-      </div>
 
-      <div id="chapterNav" class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle mx-auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown button
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+        <div id="storyBody" class="card my-3">
+          <div class="card-header">
+            <h3>
+              <p class="float-left my-auto">${story.chapters[chapter - 1].title}</p>
+              <div class="dropdown float-right">
+                <button class="btn btn-secondary dropdown-toggle mx-auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Chapters
+                </button>
+                <div id="chapterNav" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                </div>
+              </div>
+            </h3>
+          </div>
+          <p class="card-text mx-3">${story.chapters[chapter - 1].text}</p>
         </div>
-      </div>
+      `);
+    };
 
-      <div id="storyBody" class="card my-3">
-        <h3 class="card-header">${story.chapters[0].title}</h3>
-        <p class="card-text mx-3">${story.chapters[0].text}</p>
-      </div>
-    `);
-  };
+    const chapterMenu = function(chapter, number) {
+      return $(`
+        <a class="dropdown-item" href="story?id=${story_id}&chapter=${number}">${chapter.title}</a>
+      `);
+    };
 
-
-  // Get the opinion ID for this page out of the URL
-  const story_id = new URLSearchParams(window.location.search).get('id');
-
-  // Load the story from the database
-  $.ajax({method: 'GET', url: `/stories/${story_id}`})
-    .fail(() => $('#story .loading').text('Could not load opinion!'))
-    .done(function(story) {
-      $('#story .loading').remove();
-      $('#story').append(storyHeader(story));
-      $('main').append(storyBody(story));
+    // Load the story from the database
+    $.ajax({method: 'GET', url: `/stories/${story_id}`})
+      .fail(() => $('#story .loading').text('Could not load opinion!'))
+      .done(function(story) {
+        $('#story .loading').remove();
+        $('#story').append(storyHeader(story));
+        $('main').append(storyBody(story, chapter_number));
+        let count = 0;
+        for (chapter of story.chapters) {
+          $('#chapterNav').append(chapter, count);
+          count++;
+        }
+        $('.dropdown-toggle').dropdown();
     });
 
     </script>
