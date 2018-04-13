@@ -4,14 +4,14 @@ html{
 }
 body{
   background-color: #b8b8b8;
-  border: thin solid red;
+  border: thin solid blue;
   overflow: auto;
   height: 100%;
 }
 #header{
   border-radius: 15px;
   text-align: center;
-  border: thin 2px red;
+  border: thin 2px blue;
   background-color:  #fff3e6;
   box-sizing: border-box;
 }
@@ -34,7 +34,7 @@ body{
   box-sizing: border-box;
 }
 .btn{
-  background-color: #b30000;
+  background-color: #0000ff;
 }
 
 #chapterSave{

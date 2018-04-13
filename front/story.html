@@ -30,7 +30,7 @@
       return $(`
         <header>
           <h1>${story.title}</h1>
-          <p>${story.author.name}</p>
+          <p><a href="profile?author=${story.author.id}">${story.author.name}</a></p>
         </header>
     `);
   };
@@ -38,16 +38,16 @@
   const storyBody = function(story) {
     return $(`
       <div id="storyInfo">
-        <div class="card" style="width: 45rem;">
+        <div class="card mx-5 my-3" style="width: 45rem;">
           <div class="card-header">Summary</div>
           <div class="card-text">${story.summary}</div>
         </div>
-        <ul class="list-group">
+        <ul class="list-group mx-5 my-3">
           <li id="genreTag" class="list-group-item" style="width: 15rem;">genre</li>
         </ul>
       </div>
 
-      <div id="chapterNav" class="dropdown">
+      <div id="chapterNav" class="dropdown mx-5 my-3">
         <button class="btn btn-secondary dropdown-toggle mx-auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Dropdown button
         </button>
