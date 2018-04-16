@@ -20,6 +20,8 @@
         <button type="click" class="btn" disabled>My Stories</button>
         <button type="click" class="btn" disabled>Saved Works</button>
       </div>
+    </form>
+    <form id="searchNavigation">
       <div id="searchbar">
         <button type="submit" id="findButton" class="btn" >search</button>
         <input type="text" placeholder="search" id="find" class="form-control" autocomplete="off" required>
@@ -44,10 +46,12 @@
   // and a quick summary
   // and show how many people liked this story
     const storyArticle = function(story) {
-      return $(`
+
+      const article = $(`
         <article class="card my-3">
           <div class="card-header">
             <a href="story?id=${story._id}">${story.title}</a>
+            <a id="editlink" href="/createStory?ID=${story._id}" id="editStory">Edit story</a>
             <span class="badge badge-pill badge-dark"><a href="profile?author=${story.author.id}">${story.author.name}</a></span>
           </div>
           <div class="card-body">
@@ -56,19 +60,25 @@
           </div>
         </article>
       `);
+      //check to see if user is the story author
+      // No delete option if the user isn't the comment author
+      if (!self || self.id !== story.author.id) {
+        article.find('#editlink').remove();
+      }
+      return article
     };
 
     // Check if we're logged in
     // if logged in then somone may state to create a story
+    let self = null;
     $.ajax({method: 'GET', url: '/user'})
       .done(function(user) {
+        self = user;
         if (user) {
           $('#log').attr('href', '/logout').text('Log out');
           $('#new_Story :input').prop('disabled', false);
           $('#new_Story :button').prop('disabled', false);
-          $('#navButtons :button').prop('disabled', false); //undisable the nav bar
-          // if your the author of a  story then you get sent to storyEditor
-          // if not the author then you get sent to story page
+          $('#navButtons :button').prop('disabled', false);
           }
         });
 
