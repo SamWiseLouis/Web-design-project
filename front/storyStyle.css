@@ -29,7 +29,6 @@ body{
 #chapterOptions{
   width: 100%;
   text-align: center;
-  border: thick solid black;
 
   box-sizing: border-box;
 }
@@ -57,7 +56,6 @@ a{
   height: 400px ;
   overflow: auto;
   background: white;
-  border: solid thick black;
   box-sizing:border-box;
 }
 #chapterSelector{
