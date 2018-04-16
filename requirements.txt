@@ -1,3 +1,11 @@
+Features due by 4/30:
+ 1) A logged-in user can create an author profile.
+ 2) A logged-in author can edit the information in their profile.
+ 3) A logged-in author can create a story.
+ 4) A logged-in author can add a chapter to a story.
+ 5) A logged-in author can edit chapters.
+
+
 Features due by 4/16:
  1) Home page that lists all stories in some default order.
  2) Story page where you can read a story.
