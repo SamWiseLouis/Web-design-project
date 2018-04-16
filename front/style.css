@@ -1,18 +1,27 @@
-
+body{
+  background-color: #b8b8b8;
+}
 #header{
-  height: 10%;
+  overflow: auto;
+  height: 8%;
+  border: 5px solid black;
+  background-color: #37be64;
+  box-sizing: border-box;
+  border-radius: 1%;
 }
 h1{
   float: right;
-  width: 92.2%;
-  height: 20%;
-  background-color: #8ced96;
+  width: 82.2%;
+  height: 9%;
+
   box-sizing: border-box;
 }
 img{
-  width: 7.8%;
-    box-sizing: border-box;
+  width: 17.8%;
+  box-sizing: border-box;
+
 }
+
 
 #navigation{
   width: 100%;
@@ -39,4 +48,45 @@ img{
   float: right;
   width: 50%;
   box-sizing: border-box;
+}
+
+.badge {
+  background-color: #8c1580;
+}
+
+.badge a {
+  color: white;
+  text-decoration: none;
+}
+
+a {
+  color: #8c1580;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #e2a8ff;
+  text-decoration: none;
+}
+
+.btn {
+  background-color: #8c1580;
+  border-color: #8c1580;
+}
+
+.btn:disabled {
+  background-color: #8c1580;
+  border-color: #8c1580;
+}
+
+.btn:hover {
+  background-color: #e2a8ff;
+  color: black;
+  border-color: #e2a8ff;
+}
+
+.btn:active {
+  background-color: white;
+  color: black;
+  border-color: white;
 }

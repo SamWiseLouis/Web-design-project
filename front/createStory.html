@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="storyStyle.css">
+    <title>CreateStory</title>
+  </head>
+
+  <body class="container" text-center>
+
+    <!-- this page should only show up to the author of a story or to somone who is making a new story-->
+    <!--ergo must be logged in to have gotten here or must be author => implies that you have logged in-->
+
+    <!-- need to find a way to link the title of the page to the storys name-->
+    <h1 id="header" class="text-center display-3"><b>Story Editor</b></h1>
+
+
+
+    <div id="subheader">
+    <h2 id="chapter_title" class="text-center display 3">Chapter Title</h2>
+    <!-- here is where the chapter summary will be loaded and added to-->
+    </div>
+
+    <div id="chapterOptions" width="100%" >
+    <center>
+    <!-- will make a loop so that upon page load this slector will add the number of chapters the story has to the options -->
+    <select id="chapterSelector"class="btn" background-color="#222426">
+    <option value="" selected="true">Chapter</option>
+      <!-- here i need to axcess from the story the number of chapters and the writing associated with each chapter -->
+    </select>
+    <button id="chapterAdd"  type="click" class="btn btn-secondary" >Add Chapter</button>
+    <button id="chapterSave" type="click" class="btn btn-secondary" >save Chapter</button>
+    </center>
+    </div>
+
+    <main id="Chapter">
+      <!-- the text should be loader from the chaper if any so the author can edit-->
+      <!-- otherwise if new chaper or new story should have placeholder-->
+    <div id="currentChapter" contenteditable="true" overflow="auto"></div>
+    <!-- should return the author to the archive and have saved all changes to each chapter in the story-->
+    <!-- going to need one hell of a post statement here-->
+    <button type="submit" id="findButton" class="btn btn-primary" >publish Update</button>
+    </main>
+
+    <footer class="bg-dark fixed-bottom p-2">
+      <a href="/" class="text-white float-left">Back to Archive</a>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    // this is where the story editor will teather to the story clicked and actually allow editing and chapter to be grabbed
+
+
+    //automatically generate the right number of chapters according to the story saved in database
+  const id = new URLSearchParams(window.location.search).get('ID');
+  console.log(id)
+    // get the story by the id
+    $.ajax({method: 'GET', url: `/stories/${id}`})
+    .done(function(story){
+      if(story)
+      console.log(story);
+      for (var i = 0; i < story.chapters.length; i++) {
+        const selector = document.getElementById('chapterSelector');
+        var x = selector.options.length;
+        const option = document.createElement('option');
+        option.value = option.text = ("Chapter"+" "+x);
+        selector.add(option)
+        $('#header').text(story.title);
+        console.log("appended chapters to chapter selector")
+      }
+    });
+
+    // can manually add new chapters
+    $('#chapterAdd').on('click', function() {
+      const selector = document.getElementById('chapterSelector');
+      var x = selector.options.length;
+      const option = document.createElement('option');
+      option.value = option.text = ("Chapter"+" "+x);
+      selector.add(option)
+      console.log("chapter added")
+
+    });
+
+    // when a chapter is selected change the text box to the database.array[x] text
+    $('#chapterSelector').on('change', function(){
+      const selector = $(this);
+      $.ajax({method: 'GET', url: `/stories/${id}`})
+      .done(function(story){
+        if(story)
+          var x = selector.prop("selectedIndex");
+          console.log(x);
+          const chapterText = story.chapters[x-1].text;
+          const chapterTitle = story.chapters[x-1].title;
+          console.log(chapterText);
+          console.log(chapterTitle);
+        $('#currentChapter').append(chapterText);
+        $('#chapter_title').text(chapterTitle);
+        console.log("done")
+        });
+    });
+
+
+
+    </script>
+  </body>
+</html>

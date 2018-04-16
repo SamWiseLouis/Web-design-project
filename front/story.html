@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="storyStyle.css">
+  </head>
+  <body>
+    <header id="story" class="jumbotron">
+      <h1 class="loading">Loading...</h1>
+    </header>
+    <main>
+      <div>
+        <div class="card mx-5 my-3">
+          <h3 class="card-header">Summary</h3>
+          <p id="storyInfo" class="card-text mx-3"></p>
+        </div>
+        <ul id="genreTags" class="list-group mx-5 my-3">
+          <li class="list-group-item" style="width: 15rem;">genre</li>
+        </ul>
+      </div>
+
+      <div id="storyBody" class="card mt-4">
+        <div class="card-header">
+          <h3>
+            <p id="chapterTitle" class="float-left my-auto"></p>
+            <select class="btn mx-auto float-right" type="button" id="chapterNav">
+              <option selected="true">Chapters</option>
+            </select>
+          </h3>
+        </div>
+        <p id="chapterText" class="card-text mx-3"></p>
+        <div id="chapterButtons" class="card-footer"></div>
+      </div>
+    </main>
+    <footer class="bg-dark fixed-bottom p-2">
+      <a href="/" class="text-white float-left">Back to Archive</a>
+      <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    // Get the opinion ID for this page out of the URL
+    const story_id = new URLSearchParams(window.location.search).get('id');
+    let chapter_number = new URLSearchParams(window.location.search).get('chapter');
+    if (!chapter_number) {  // default to the first chapter
+      chapter_number = '1';
+    }
+
+    // Generate a story
+    // then have a bot that holds the tags the genre and the story summary
+    const storyHeader = function(story) {
+      return $(`
+        <header>
+          <h1>${story.title}</h1>
+          <p><a href="profile?author=${story.author.id}">${story.author.name}</a></p>
+        </header>
+      `);
+    };
+
+    const storyBody = function(story, chapter) {
+      $('#storyInfo').append(story.summary);
+      if (chapter_number <= story.chapters.length) {
+        $('#chapterTitle').append(chapter.title);
+        $('#chapterText').append(chapter.text);
+      }
+    };
+
+    const chapterMenu = function(number, chapter) {
+      return $(`
+        <option>${number}. ${chapter.title}</option>
+      `);
+    };
+
+    // Load the story from the database
+    $.ajax({method: 'GET', url: `/stories/${story_id}`})
+      .fail(() => $('#story .loading').text('Could not load opinion!'))
+      .done(function(story) {
+        if (chapter_number < story.chapters.length) {
+          $('#chapterButtons').append(`<button id="next" class="btn float-right">Next chapter</button>`);
+        }
+        if (chapter_number !== '1') {
+          $('#chapterButtons').append(`<button id="prev" class="btn float-left">Previous chapter</button>`);
+        }
+        $('#story .loading').remove();
+        $('#story').append(storyHeader(story));
+        storyBody(story, story.chapters[chapter_number - 1]);
+        let count = 1;
+        for (chapter of story.chapters) {
+          $('#chapterNav').append(chapterMenu(count, chapter));
+          count++;
+        }
+    });
+
+    $('#chapterNav').on('change', function(){
+      $(location).attr('href', `story?id=${story_id}&chapter=${$(this).prop("selectedIndex")}`);
+    });
+
+    $('#chapterButtons').on('click', 'button', function() {
+      if ($(this).attr('id') === 'next') {
+        $(location).attr('href', `story?id=${story_id}&chapter=${parseInt(chapter_number) + 1}`);
+      } else {
+        $(location).attr('href', `story?id=${story_id}&chapter=${parseInt(chapter_number) - 1}`);
+      }
+    });
+    </script>
+  </body>
+</html>

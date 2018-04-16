@@ -8,7 +8,7 @@ server.use(express.urlencoded({extended: true}));
 // Set up sessions to recognize authenticated users
 const session = require('express-session');
 server.use(session({
-  name: 'story', // Cookie name
+  name: 'stories', // Cookie name
   resave: false, // Required option
   saveUninitialized: false, // Required option
   secret: require('../secret'), // Accesses secret.js
@@ -47,15 +47,15 @@ server.use(function(request, response, next) {
 server.use(express.static('front', {extensions: ['html']}));
 
 // Back end APIs
-server.use('/opinions', require('./back/opinions'));
-server.use('/comments', require('./back/comments'));
+server.use('/stories', require('./back/stories'));
+server.use('/profiles', require('./back/profiles'));
 
 // Login route
 server.get('/auth', passport.authenticate('google', {scope: ['profile']}));
 
 // After login, send the user to the URL they were at before
 server.get('/auth/callback', passport.authenticate('google'),
-  (request, response) => response.redirect(request.headers.referer)
+  (request, response) => response.redirect(request.headers.referer || '/')
 );
 
 // Route for returning the logged-in user
@@ -64,7 +64,7 @@ server.get('/user', (request, response) => response.send(request.user));
 // Logout route
 server.get('/logout', function(request, response) {
   request.logout();
-  response.redirect(request.headers.referer);
+  response.redirect(request.headers.referer || '/');
 });
 
 // Error handling
