@@ -8,21 +8,37 @@
   </head>
   <body>
     <header id="story" class="jumbotron">
-      <h1 class="loading">loading...</h1>
+      <h1 class="loading">Loading...</h1>
     </header>
     <main>
+      <div>
+        <div class="card mx-5 my-3">
+          <h3 class="card-header">Summary</h3>
+          <p id="storyInfo" class="card-text mx-3"></p>
+        </div>
+        <ul id="genreTags" class="list-group mx-5 my-3">
+          <li class="list-group-item" style="width: 15rem;">genre</li>
+        </ul>
+      </div>
+
+      <div id="storyBody" class="card mt-4">
+        <div class="card-header">
+          <h3>
+            <p id="chapterTitle" class="float-left my-auto"></p>
+            <select class="btn mx-auto float-right" type="button" id="chapterNav">
+              <option selected="true">Chapters</option>
+            </select>
+          </h3>
+        </div>
+        <p id="chapterText" class="card-text mx-3"></p>
+        <div id="chapterButtons" class="card-footer"></div>
+      </div>
     </main>
-    <form id="new" class="container mb-3">
-      <h5>Leave a comment</h5>
-      <textarea id="argument" placeholder="What do you think?" class="form-control my-1" required></textarea>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
     <footer class="bg-dark fixed-bottom p-2">
       <a href="/" class="text-white float-left">Back to Archive</a>
       <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script>
     // Get the opinion ID for this page out of the URL
     const story_id = new URLSearchParams(window.location.search).get('id');
@@ -43,38 +59,16 @@
     };
 
     const storyBody = function(story, chapter) {
-      return $(`
-        <div id="storyInfo">
-          <div class="card mx-5 my-3">
-            <h3 class="card-header">Summary</h3>
-            <p class="card-text mx-3">${story.summary}</p>
-          </div>
-          <ul class="list-group mx-5 my-3">
-            <li id="genreTag" class="list-group-item" style="width: 15rem;">genre</li>
-          </ul>
-        </div>
-
-        <div id="storyBody" class="card my-3">
-          <div class="card-header">
-            <h3>
-              <p class="float-left my-auto">${story.chapters[chapter - 1].title}</p>
-              <div class="dropdown float-right">
-                <button class="btn btn-secondary dropdown-toggle mx-auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Chapters
-                </button>
-                <div id="chapterNav" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                </div>
-              </div>
-            </h3>
-          </div>
-          <p class="card-text mx-3">${story.chapters[chapter - 1].text}</p>
-        </div>
-      `);
+      $('#storyInfo').append(story.summary);
+      if (chapter_number <= story.chapters.length) {
+        $('#chapterTitle').append(chapter.title);
+        $('#chapterText').append(chapter.text);
+      }
     };
 
-    const chapterMenu = function(chapter, number) {
+    const chapterMenu = function(number, chapter) {
       return $(`
-        <a class="dropdown-item" href="story?id=${story_id}&chapter=${number}">${chapter.title}</a>
+        <option>${number}. ${chapter.title}</option>
       `);
     };
 
@@ -82,17 +76,33 @@
     $.ajax({method: 'GET', url: `/stories/${story_id}`})
       .fail(() => $('#story .loading').text('Could not load opinion!'))
       .done(function(story) {
+        if (chapter_number < story.chapters.length) {
+          $('#chapterButtons').append(`<button id="next" class="btn float-right">Next chapter</button>`);
+        }
+        if (chapter_number !== '1') {
+          $('#chapterButtons').append(`<button id="prev" class="btn float-left">Previous chapter</button>`);
+        }
         $('#story .loading').remove();
         $('#story').append(storyHeader(story));
-        $('main').append(storyBody(story, chapter_number));
-        let count = 0;
+        storyBody(story, story.chapters[chapter_number - 1]);
+        let count = 1;
         for (chapter of story.chapters) {
-          $('#chapterNav').append(chapter, count);
+          $('#chapterNav').append(chapterMenu(count, chapter));
           count++;
         }
-        $('.dropdown-toggle').dropdown();
     });
 
+    $('#chapterNav').on('change', function(){
+      $(location).attr('href', `story?id=${story_id}&chapter=${$(this).prop("selectedIndex")}`);
+    });
+
+    $('#chapterButtons').on('click', 'button', function() {
+      if ($(this).attr('id') === 'next') {
+        $(location).attr('href', `story?id=${story_id}&chapter=${parseInt(chapter_number) + 1}`);
+      } else {
+        $(location).attr('href', `story?id=${story_id}&chapter=${parseInt(chapter_number) - 1}`);
+      }
+    });
     </script>
   </body>
 </html>

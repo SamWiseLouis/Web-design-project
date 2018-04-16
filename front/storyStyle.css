@@ -32,15 +32,36 @@ body{
 
   box-sizing: border-box;
 }
-.btn{
-  background-color: #8c1580;
-}
-a{
+a {
   color: #8c1580;
+  text-decoration: none;
 }
 
-#story{
-  background: #f2f2f2;
+a:hover {
+  color: #e2a8ff;
+  text-decoration: none;
+}
+
+.btn {
+  background-color: #8c1580;
+  border-color: #8c1580;
+}
+
+.btn:disabled {
+  background-color: #8c1580;
+  border-color: #8c1580;
+}
+
+.btn:hover {
+  background-color: #e2a8ff;
+  color: black;
+  border-color: #e2a8ff;
+}
+
+.btn:active {
+  background-color: white;
+  color: black;
+  border-color: white;
 }
 
 #chapterSave{

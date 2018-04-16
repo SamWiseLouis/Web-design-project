@@ -4,18 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="profileStyle.css">
   </head>
   <body>
     <header id="header" class="mx-3 mt-3"></header>
     <div class="mx-3">
-        <div class="card border-primary" style="width: 30rem;">
+        <div class="card" style="width: 30rem;">
           <h4 class="card-header">My Stories</h4>
           <div id="stories" class="card-body my-2" style="width: 30rem;"></div>
         </div>
     </div>
   </body>
   <footer class="bg-dark fixed-bottom p-2">
-    <a href="/" class="text-white float-left">Back to all opinions</a>
+    <a href="/" class="text-white float-left">Back to Archive</a>
     <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
   </footer>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -23,7 +24,7 @@
 
   const profileHeader = function(profile) {
     return $(`
-      <div class="card mb-3 border-primary" style="width: 45rem;">
+      <div class="card mb-3" style="width: 45rem;">
         <h3 class="card-header">${profile.author.name}</h3>
         <p class="card-text mx-3">${profile.desc}</p>
       </div>
