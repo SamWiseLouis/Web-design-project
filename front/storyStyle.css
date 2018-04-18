@@ -29,6 +29,7 @@ body{
 #chapterOptions{
   width: 100%;
   text-align: center;
+  margin: 1%;
 
   box-sizing: border-box;
 }
@@ -67,6 +68,7 @@ a:hover {
 #chapterSave{
   float: right;
 }
+
 #chapterAdd{
   float: right;
 }
@@ -82,4 +84,8 @@ a:hover {
 #chapterSelector{
   background-color: #222426;
   color: white;
+}
+
+#publish{
+  margin: 2%;
 }

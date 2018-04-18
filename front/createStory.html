@@ -19,7 +19,7 @@
 
 
     <div id="subheader">
-    <h2 id="chapter_title" class="text-center display 3">Chapter Title</h2>
+    <h2 id="chapter_title" class="text-center display 3 "contenteditable="true">Chapter Title</h2>
     <!-- here is where the chapter summary will be loaded and added to-->
     </div>
 
@@ -41,7 +41,7 @@
     <div id="currentChapter" contenteditable="true" overflow="auto"></div>
     <!-- should return the author to the archive and have saved all changes to each chapter in the story-->
     <!-- going to need one hell of a post statement here-->
-    <button type="submit" id="findButton" class="btn btn-primary" >publish Update</button>
+    <button type="submit" id="publish" class="btn btn-primary" >publish Update</button>
     </main>
 
     <footer class="bg-dark fixed-bottom p-2">
@@ -69,6 +69,7 @@
         selector.add(option)
         $('#header').text(story.title);
         console.log("appended chapters to chapter selector")
+      // if their is a chapter one set the selector to start at this chapter
       }
     });
 
