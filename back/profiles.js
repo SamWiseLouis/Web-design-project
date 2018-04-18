@@ -22,4 +22,26 @@ router.get('/:id', function(request, response, next) {
   });
 });
 
+router.patch('/:id', function(request, response, next) {
+  if (request.user.id !== db.profiles.find({'_id': request.params.id}).author.id) {  // Access control: user must be the author of the profile
+    return next(new Error('Forbidden'));
+  }
+
+  const profile = {_id: new mongodb.ObjectId(request.params.id)};
+
+  if (request.body.command === 'username') {
+    update = {name: request.body.name};
+  } else if (request.body.command === 'desc') {
+    update = {desc: request.body.desc};
+  } else {
+    return next(new Error('Bad request'));
+  }
+
+  db.profiles.updateOne(profile, update, function(error, report) {
+    if (error) return next(error);
+    if (!report.matchedCount) return next(new Error('Not found'));
+    response.end();
+  });
+});
+
 module.exports = router;

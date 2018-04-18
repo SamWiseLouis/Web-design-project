@@ -25,7 +25,7 @@
   const profileHeader = function(profile) {
     return $(`
       <div class="card mb-3" style="width: 45rem;">
-        <h3 class="card-header">${profile.author.name}</h3>
+        <h3 id="name" class="card-header">${profile.author.name}</h3>
         <p class="card-text mx-3">${profile.desc}</p>
       </div>
     `);
@@ -43,7 +43,7 @@
   const author_id = new URLSearchParams(window.location.search).get('author');
   $.ajax({method: 'GET', url: '/user'})
     .done(function(user) {
-      // Make a few changes to the page if so
+      // Make a few changes to the page if logged in
       if (user) {
         $('#log').attr('href', '/logout').text('Log out');
         $('#new :input').prop('disabled', false);
@@ -59,8 +59,17 @@
                   $('#stories').append(profileStories(story));
                 });
             }
+            if (user) {
+              if (user.id === author_id) {
+                $('#name').append(`<button id="edit" class="btn float-right">Edit</button>`); // edit button if the logged in user is the author of the profile
+              }
+            }
           });
       }
+    });
+
+    $('#header').on('click', 'button', function() {
+      $(location).attr('href', `editProfile?id=${author_id}`);
     });
 
   </script>

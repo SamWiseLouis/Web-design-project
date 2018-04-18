@@ -78,6 +78,9 @@
           $('#log').attr('href', '/logout').text('Log out');
           $('#new_Story :input').prop('disabled', false);
           $('#new_Story :button').prop('disabled', false);
+
+          // if you're the author of a story then you get sent to storyEditor
+          // if you're not the author then you get sent to story page
           $('#navButtons :button').prop('disabled', false);
           }
         });

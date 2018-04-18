@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="storyStyle.css">
+  </head>
+
+  <body class="container" text-center>
+
+    <!-- this page should only show up to the author of a profile-->
+    <h3 id="header" class="text-center display-3">Profile Editor</h3>
+
+    <main>
+      <form id="editor">
+        <input type="text" id="name" class="form-control my-1" autocomplete="off" required>
+        <textarea id="desc" class="form-control my-1" required></textarea>
+        <button type="submit" class="btn btn-primary my-1">Submit</button>
+      </form>
+    </main>
+
+    <footer class="bg-dark fixed-bottom p-2">
+      <a href="/" class="text-white float-left">Back to Archive</a>
+      <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    const id = new URLSearchParams(window.location.search).get('ID');
+
+    // double check that the user is the profile author
+    $.ajax({method: 'GET', url: '/user'})
+      .done(function(user) {
+        if (user) {
+          $('#log').attr('href', '/logout').text('Log out');
+          $('#new :input').prop('disabled', false);
+          if (id === user.id) {
+            $('#name').text(user.name);
+            if (id) {
+              $.ajax({method: 'GET', url: `/profiles/${author_id}`})
+                .done(function(profile) {
+                  $('#desc').text(profile.desc);
+                });
+            }
+          }
+        }
+      });
+
+    </script>
+  </body>
+</html>
