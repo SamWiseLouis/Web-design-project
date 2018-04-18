@@ -15,7 +15,7 @@ mongodb.MongoClient.connect('mongodb://localhost:27017', function(error, client)
 router.get('/:id', function(request, response, next) {
   const user_id = request.params.id;
 
-  db.profiles.findOne({'author.id': {$eq: user_id}}, function(error, profile) {
+  db.profiles.findOne({'author.id': user_id}, function(error, profile) {
     if (error) return next(error);
     if (!profile) return next(new Error('Not found'));
     response.json(profile);
@@ -23,16 +23,20 @@ router.get('/:id', function(request, response, next) {
 });
 
 router.patch('/:id', function(request, response, next) {
-  if (request.user.id !== db.profiles.find({'_id': request.params.id}).author.id) {  // Access control: user must be the author of the profile
+  if (request.params.id !== request.body.user) {  // access control
     return next(new Error('Forbidden'));
   }
+  const profile = {'author.id': request.params.id};
 
-  const profile = {_id: new mongodb.ObjectId(request.params.id)};
-
-  if (request.body.command === 'username') {
-    update = {name: request.body.name};
-  } else if (request.body.command === 'desc') {
-    update = {desc: request.body.desc};
+  if (request.body.name && request.body.desc) {
+    update = {$set: {
+      'author.name': request.body.name,
+      desc: request.body.desc
+    }};
+  } else if (request.body.desc) {
+    update = {$set: {desc: request.body.desc}};
+  } else if  (request.body.name) {
+    update = {$set: {'author.name': request.body.name}};
   } else {
     return next(new Error('Bad request'));
   }

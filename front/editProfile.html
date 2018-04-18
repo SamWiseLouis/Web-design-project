@@ -14,9 +14,11 @@
 
     <main>
       <form id="editor">
+        <h4>Username</h4>
         <input type="text" id="name" class="form-control my-1" autocomplete="off" required>
+        <h4>Description</h4>
         <textarea id="desc" class="form-control my-1" required></textarea>
-        <button type="submit" class="btn btn-primary my-1">Submit</button>
+        <button type="submit" class="btn btn-primary my-1 float-right">Submit</button>
       </form>
     </main>
 
@@ -27,18 +29,19 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-    const id = new URLSearchParams(window.location.search).get('ID');
-
+    const id = new URLSearchParams(window.location.search).get('id');
+    let self = null;
     // double check that the user is the profile author
     $.ajax({method: 'GET', url: '/user'})
       .done(function(user) {
         if (user) {
+          self = user.id;
           $('#log').attr('href', '/logout').text('Log out');
           $('#new :input').prop('disabled', false);
           if (id === user.id) {
-            $('#name').text(user.name);
+            $('#name').val(user.name);
             if (id) {
-              $.ajax({method: 'GET', url: `/profiles/${author_id}`})
+              $.ajax({method: 'GET', url: `/profiles/${id}`})
                 .done(function(profile) {
                   $('#desc').text(profile.desc);
                 });
@@ -46,6 +49,20 @@
           }
         }
       });
+
+    $('#editor').on('submit', function(event) {
+      event.preventDefault();
+      const profile = {
+        name: $('#name').val().trim(),
+        desc: $('#desc').val().trim(),
+        user: self
+      };
+      $.ajax({method: 'PATCH', url: `/profiles/${id}`, data: profile})
+        .fail(() => alert('Could not submit!'))
+        .done(function(profile) {
+          location.reload();
+        });
+    });
 
     </script>
   </body>
