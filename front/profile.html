@@ -51,6 +51,9 @@
 
       if (author_id) {
         $.ajax({method: 'GET', url: `/profiles/${author_id}`})
+          .fail(function() {
+            $('#header').append('User profile does not exist.');
+          })
           .done(function(profile) {
             $('#header').append(profileHeader(profile));
             for (story_id of profile.story_ids) {
