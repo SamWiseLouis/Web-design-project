@@ -11,7 +11,7 @@ body{
 #header{
   border-radius: 15px;
   text-align: center;
-  border: thick 2px purple;
+  border-color: purple;
   background-color:  #f2f2f2;
   box-sizing: border-box;
 }
