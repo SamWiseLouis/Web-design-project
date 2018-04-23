@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="storyStyle.css">
+  </head>
+
+  <body class="container" text-center>
+
+    <!-- this page should only show up to the author of a profile-->
+    <h3 id="header" class="text-center display-3">Profile Editor</h3>
+
+    <main>
+      <form id="editor">
+        <h4>Username</h4>
+        <input type="text" id="name" class="form-control my-1" autocomplete="off" required>
+        <h4>Description</h4>
+        <textarea id="desc" class="form-control my-1" required></textarea>
+        <button type="submit" class="btn btn-primary my-1 float-right">Submit</button>
+      </form>
+    </main>
+
+    <footer class="bg-dark fixed-bottom p-2">
+      <a href="/" class="text-white float-left">Back to Archive</a>
+      <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    const id = new URLSearchParams(window.location.search).get('id');
+    const type = new URLSearchParams(window.location.search).get('type')
+    let self = null;
+    // double check that the user is the profile author
+    $.ajax({method: 'GET', url: '/user'})
+      .done(function(user) {
+        if (user) {
+          self = user.id;
+          $('#log').attr('href', '/logout').text('Log out');
+          $('#new :input').prop('disabled', false);
+          if (id === self) {
+            $('#name').val(user.name);
+            if (id && !type) {
+              $.ajax({method: 'GET', url: `/profiles/${id}`})
+                .done(function(profile) {
+                  $('#desc').text(profile.desc);
+                });
+            }
+          }
+        }
+      });
+
+    $('#editor').on('submit', function(event) {
+      event.preventDefault();
+      const profile = {
+        name: $('#name').val().trim(),
+        desc: $('#desc').val().trim(),
+        user: self
+      };
+      if (type === 'new') {  // posting a new profile
+        $.ajax({method: 'POST', url: `profiles`, data: profile})
+          .fail(() => alert('Could not submit!'))
+          .done(function(profile) {
+            $(location).attr('href', `editProfile?id=${id}`);
+          });
+      } else {  // patching an existing profile
+        $.ajax({method: 'PATCH', url: `profiles/${id}`, data: profile})
+          .fail(() => alert('Could not submit!'))
+          .done(function(profile) {
+            location.reload();
+          });
+      }
+    });
+
+    </script>
+  </body>
+</html>

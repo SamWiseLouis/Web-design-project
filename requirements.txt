@@ -5,6 +5,7 @@ Features due by 4/30:
  4) A logged-in author can add a chapter to a story.
  5) A logged-in author can edit chapters.
 
+------------------------------------------------------------------------------
 
 Features due by 4/16:
  1) Home page that lists all stories in some default order.
@@ -15,3 +16,6 @@ Features due by 4/16:
 Sample data you'll probably need to demonstrate these features:
 - An authors collection (with a couple of authors)
 - A stories collection (with a handful of stories)
+
+Feedback:
+- Completed 4/4 requirements.
