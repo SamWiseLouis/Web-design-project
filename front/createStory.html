@@ -60,7 +60,6 @@
     $.ajax({method: 'GET', url: `/stories/${id}`})
     .done(function(story){
       if(story)
-      console.log(story);
       for (var i = 0; i < story.chapters.length; i++) {
         const selector = document.getElementById('chapterSelector');
         var x = selector.options.length;
@@ -68,10 +67,11 @@
         option.value = option.text = ("Chapter"+" "+x);
         selector.add(option)
         $('#header').text(story.title);
-        console.log("appended chapters to chapter selector")
+        console.log(story.author.name)
       // if their is a chapter one set the selector to start at this chapter
       }
-    });
+
+  });
 
     // can manually add new chapters
     $('#chapterAdd').on('click', function() {
@@ -91,18 +91,31 @@
       .done(function(story){
         if(story)
           var x = selector.prop("selectedIndex");
-          console.log(x);
           const chapterText = story.chapters[x-1].text;
           const chapterTitle = story.chapters[x-1].title;
-          console.log(chapterText);
-          console.log(chapterTitle);
         $('#currentChapter').append(chapterText);
         $('#chapter_title').text(chapterTitle);
-        console.log("done")
         });
     });
 
-
+    //when the save chapter button is clicked save the new updated text to db
+      $('#chapterSave').on('click', function(){
+        const updatedText =$('#Chapter').text(); //get the current updated text
+        const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
+        const chapterIndex = $('#chapterSelector').prop("selectedIndex") -1; // get the chapter
+        console.log(chapterTitle);
+        console.log(chapterIndex);
+        const body = {
+          index: chapterIndex,
+          text: updatedText,
+          title: chapterTitle
+        }
+          const id = new URLSearchParams(window.location.search).get('ID');
+          $.ajax({method: 'PATCH', url: `/stories/${id}`, data: body})
+            .done(function(chapters){
+                console.log("updated")
+            });
+      });
 
     </script>
   </body>

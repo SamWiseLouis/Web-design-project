@@ -32,6 +32,15 @@ router.get('/:id', function(request, response, next) {
   });
 });
 
+router.patch('/:id', function(request,response, next){
+  const story_id = {_id: new mongodb.ObjectId(request.params.id)};
 
+  db.stories.updateOne(story_id,    //update the text and title
+    {$set: {
+      ['chapters.'+ (request.body.index)+'.text']: request.body.text,
+        ['chapters.'+ (request.body.index)+'.title']: request.body.title,
+    }});
+
+});
 
 module.exports = router;
