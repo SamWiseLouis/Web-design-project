@@ -8,7 +8,7 @@
   </head>
   <body>
     <header id="header" class="mx-3 mt-3"></header>
-    <div class="mx-3">
+    <div id="story" class="mx-3">
         <div class="card" style="width: 30rem;">
           <h4 class="card-header">My Stories</h4>
           <div id="stories" class="card-body my-2" style="width: 30rem;"></div>
@@ -53,14 +53,19 @@
         $.ajax({method: 'GET', url: `/profiles/${author_id}`})
           .fail(function() {
             $('#header').append('User profile does not exist.');
+            $('#story').remove();
           })
           .done(function(profile) {
             $('#header').append(profileHeader(profile));
-            for (story_id of profile.story_ids) {
-              $.ajax({method: 'GET', url: `/stories/${story_id}`})
-                .done(function(story) {
-                  $('#stories').append(profileStories(story));
-                });
+            if (profile.story_ids.length === 0) {
+              $('#stories').append('User has no stories.');
+            } else {
+              for (story_id of profile.story_ids) {
+                $.ajax({method: 'GET', url: `/stories/${story_id}`})
+                  .done(function(story) {
+                    $('#stories').append(profileStories(story));
+                  });
+              }
             }
             if (user) {
               if (user.id === author_id) {

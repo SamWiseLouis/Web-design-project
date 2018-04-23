@@ -30,6 +30,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     const id = new URLSearchParams(window.location.search).get('id');
+    const type = new URLSearchParams(window.location.search).get('type')
     let self = null;
     // double check that the user is the profile author
     $.ajax({method: 'GET', url: '/user'})
@@ -38,9 +39,9 @@
           self = user.id;
           $('#log').attr('href', '/logout').text('Log out');
           $('#new :input').prop('disabled', false);
-          if (id === user.id) {
+          if (id === self) {
             $('#name').val(user.name);
-            if (id) {
+            if (id && !type) {
               $.ajax({method: 'GET', url: `/profiles/${id}`})
                 .done(function(profile) {
                   $('#desc').text(profile.desc);
@@ -57,11 +58,19 @@
         desc: $('#desc').val().trim(),
         user: self
       };
-      $.ajax({method: 'PATCH', url: `/profiles/${id}`, data: profile})
-        .fail(() => alert('Could not submit!'))
-        .done(function(profile) {
-          location.reload();
-        });
+      if (type === 'new') {  // posting a new profile
+        $.ajax({method: 'POST', url: `profiles`, data: profile})
+          .fail(() => alert('Could not submit!'))
+          .done(function(profile) {
+            $(location).attr('href', `editProfile?id=${id}`);
+          });
+      } else {  // patching an existing profile
+        $.ajax({method: 'PATCH', url: `profiles/${id}`, data: profile})
+          .fail(() => alert('Could not submit!'))
+          .done(function(profile) {
+            location.reload();
+          });
+      }
     });
 
     </script>
