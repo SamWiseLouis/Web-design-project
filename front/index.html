@@ -52,10 +52,9 @@
 
       const article = $(`
         <article class="card my-3">
-          <div class="card-header">
+          <div id= "${story._id}" class="card-header">
             <a href="story?id=${story._id}">${story.title}</a>
             <span class="badge badge-pill badge-dark"><a href="profile?author=${story.author.id}">${story.author.name}</a></span>
-            <span id="editlink" class="badge badge-pill badge-dark float-right"><a href="/createStory?ID=${story._id}" id="editStory">Edit story</a></span>
           </div>
           <div class="card-body">
             <p>${story.summary}</p>
@@ -82,6 +81,14 @@
           $('#new_Story :input').prop('disabled', false);
           $('#new_Story :button').prop('disabled', false);
           $('#navButtons :button').prop('disabled', false);
+          $.ajax({method: 'GET', url: '/stories'})
+            .done(function(stories) {
+              for (story of stories) {
+                if (story.author.id === user.id) {
+                  $(`#${story._id}`).append(`<span id="editlink" class="badge badge-pill badge-dark float-right"><a href="/createStory?ID=${story._id}" id="editStory">Edit story</a></span>`)
+                }
+              }
+            });
           // check if the user has a profile already
           // if not, the "my profile" button is the "create profile" button
           $.ajax({method: 'GET', url: '/profiles/' + user.id})
