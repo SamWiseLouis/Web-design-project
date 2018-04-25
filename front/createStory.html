@@ -35,12 +35,14 @@
     </center>
     </div>
 
-    <main id="Chapter">
+    <main id="page">
+      <div id = "Chapter">
       <!-- the text should be loader from the chaper if any so the author can edit-->
       <!-- otherwise if new chaper or new story should have placeholder-->
     <div id="currentChapter" contenteditable="true" overflow="auto"></div>
     <!-- should return the author to the archive and have saved all changes to each chapter in the story-->
     <!-- going to need one hell of a post statement here-->
+    </div>
     <button type="submit" id="publish" class="btn btn-primary" >publish Update</button>
     </main>
 
@@ -82,6 +84,7 @@
       selector.add(option)
       console.log("chapter added")
 
+    //  $.ajax({method: 'PATCH', url: `/stories/${id}`})
     });
 
     // when a chapter is selected change the text box to the database.array[x] text
@@ -91,31 +94,38 @@
       .done(function(story){
         if(story)
           var x = selector.prop("selectedIndex");
+          console.log(x-1);
           const chapterText = story.chapters[x-1].text;
           const chapterTitle = story.chapters[x-1].title;
+          console.log(chapterText);
+          console.log(chapterTitle);
         $('#currentChapter').append(chapterText);
         $('#chapter_title').text(chapterTitle);
+
+
         });
     });
 
     //when the save chapter button is clicked save the new updated text to db
       $('#chapterSave').on('click', function(){
-        const updatedText =$('#Chapter').text(); //get the current updated text
+        const updatedText = $('#Chapter').text(); //get the current updated text
         const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
         const chapterIndex = $('#chapterSelector').prop("selectedIndex") -1; // get the chapter
-        console.log(chapterTitle);
+        console.log(updatedText);
         console.log(chapterIndex);
-        const body = {
+        const updatebody = {
           index: chapterIndex,
           text: updatedText,
           title: chapterTitle
         }
           const id = new URLSearchParams(window.location.search).get('ID');
-          $.ajax({method: 'PATCH', url: `/stories/${id}`, data: body})
+          $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
             .done(function(chapters){
                 console.log("updated")
             });
       });
+
+
 
     </script>
   </body>
