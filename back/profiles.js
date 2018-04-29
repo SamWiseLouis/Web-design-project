@@ -28,14 +28,16 @@ router.patch('/:id', function(request, response, next) {
   }
   const profile = {'author.id': request.params.id};
 
-  if (request.body.name && request.body.desc) {
+  if (request.body.story) {
+    update = {$push: {story_ids: request.body.story}};
+  } else if (request.body.name && request.body.desc) {
     update = {$set: {
       'author.name': request.body.name,
       desc: request.body.desc
     }};
   } else if (request.body.desc) {
     update = {$set: {desc: request.body.desc}};
-  } else if  (request.body.name) {
+  } else if (request.body.name) {
     update = {$set: {'author.name': request.body.name}};
   } else {
     return next(new Error('Bad request'));

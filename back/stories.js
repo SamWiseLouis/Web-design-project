@@ -45,8 +45,8 @@ router.patch('/:id', function(request, response, next){
     }
   });
   // then it is an update of an existing chapter
-  if (request.body){
-    db.stories.updateOne(story_id,    //update the text and title
+  if (request.body.index > -1){
+    db.stories.updateOne(story_id,  // update includes a chapter update
       {$set: {
         ['chapters.'+ (request.body.index)+'.text']: request.body.text,
         ['chapters.'+ (request.body.index)+'.title']: request.body.chapter_title,
@@ -57,19 +57,33 @@ router.patch('/:id', function(request, response, next){
       if (!report.matchedCount) return next(new Error('Not found'));
       response.end();
     });
+  } else {
+    db.stories.updateOne(story_id,  // update is only for the title or summary
+      {$set: {
+        title: request.body.story_title,
+        summary: request.body.summary
+    }}, function(error, report) {
+      if (error) return next(error);
+      if (!report.matchedCount) return next(new Error('Not found'));
+      response.end();
+    });
   }
 });
-  /*
-  //otherwise the author wants to create a new chapter
-  const chapter = {
-    title: `create a title...`,
-    text: `write a story...`
-  }
-  db.stories.updateOne(story_id,
-  {chapters: {$push: chapter }});
-  console.log("added chapter to database");
-*/
 
+router.post('/', function(request, response, next) {
+  if (!request.user) return next(new Error('Forbidden'));  // access control: user must be logged in
 
+  const story = {
+    title: request.body.story_title,
+    summary: request.body.summary,
+    author: {id: request.body.user.id, name: request.body.user.name},
+    chapters: [{title: request.body.chapter_title, text: request.body.text}]
+  };
+
+  db.stories.insertOne(story, function(error) {
+    if (error) return next(error);
+    response.json(story);
+  });
+});
 
 module.exports = router;

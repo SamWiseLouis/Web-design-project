@@ -21,12 +21,12 @@
         <option value="" selected="true">Chapters</option>
       </select>
       <button id="chapterAdd"  type="click" class="btn btn-secondary float-right" >Add Chapter</button>
-      <button id="chapterSave" type="click" class="btn btn-secondary float-right" >Save Chapter</button>
     </div>
 
     <main id="page" class="mb-5">
       <div id = "Chapter">
         <div id="currentChapter" contenteditable="true" overflow="auto"></div>
+        <button id="publish" class="btn btn-econdary">Publish</button>
       </div>
     </main>
 
@@ -82,9 +82,9 @@
               });
           });
 
-          //when the save chapter button is clicked save the new updated text to db
-          $('#chapterSave').on('click', function(){
-            const updatedText = $('#Chapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
+          // when the publish button is clicked save the new updated text to db
+          $('#publish').on('click', function(){
+            const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
             const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
             const chapterIndex = $('#chapterSelector').prop("selectedIndex") -1; // get the chapter
             const storyTitle = $('#header').text();
@@ -115,6 +115,36 @@
             // we'll only let them start with one chapter for a new story
             $('#chapterAdd').remove();
             $('#chapterSelector').remove();
+
+            // when the publish button is clicked save the new updated text to db
+            $('#publish').on('click', function(){
+              const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
+              const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
+              const storyTitle = $('#header').text();
+              const summary_text = $('#summary').text();
+              const updatebody = {
+                text: updatedText,
+                chapter_title: chapterTitle,
+                story_title: storyTitle,
+                summary: summary_text,
+                user: user
+              };
+              $.ajax({method: 'POST', url: `/stories`, data: updatebody})
+                .fail(function() {
+                  alert("Could not post story!");
+                })
+                .done(function(story) {
+                  $.ajax({method: 'PATCH', url: `/profiles/${user.id}`, data: {story: story._id, user: user.id, name: user.name}})
+                    .fail(function() {
+                      alert("Could not post story!");
+                    })
+                    .done(function() {
+                      location.reload();
+                    });
+                });
+              });
+          } else {
+            alert('User must be logged in to post a story.');
           }
         });
       }

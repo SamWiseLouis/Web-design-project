@@ -54,6 +54,7 @@ a:hover {
 
 .btn {
   margin: .2%;
+  color: white;
   background-color: #8c1580;
   border-color: #8c1580;
 }
@@ -75,10 +76,6 @@ a:hover {
   border-color: white;
 }
 
-#chapterSave{
-  float: right;
-}
-
 #chapterAdd{
   float: right;
 }
@@ -97,5 +94,5 @@ a:hover {
 }
 
 #publish{
-  margin: 2%;
+  float: right;
 }
