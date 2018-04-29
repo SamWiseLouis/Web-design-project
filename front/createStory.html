@@ -84,7 +84,7 @@
       selector.add(option)
       console.log("chapter added")
 
-    //  $.ajax({method: 'PATCH', url: `/stories/${id}`})
+      $.ajax({method: 'PATCH', url: `/stories/${id}`})
     });
 
     // when a chapter is selected change the text box to the database.array[x] text
@@ -111,15 +111,13 @@
         const updatedText = $('#Chapter').text(); //get the current updated text
         const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
         const chapterIndex = $('#chapterSelector').prop("selectedIndex") -1; // get the chapter
-        console.log(updatedText);
-        console.log(chapterIndex);
-        const updatebody = {
+        const body = {
           index: chapterIndex,
           text: updatedText,
           title: chapterTitle
         }
           const id = new URLSearchParams(window.location.search).get('ID');
-          $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
+          $.ajax({method: 'PATCH', url: `/stories/${id}`, data: body})
             .done(function(chapters){
                 console.log("updated")
             });

@@ -34,24 +34,25 @@ router.get('/:id', function(request, response, next) {
 
 router.patch('/:id', function(request, response, next){
   const story_id = {_id: new mongodb.ObjectId(request.params.id)};
-// then it is an update of an existing chapter
-
-  db.stories.updateOne(story_id,    //update the text and title
-    {$set: {
+  const chapters = {_id: new mongodb.ObjectId(request.params.chapters)};
+  // then it is an update of an existing chapter
+  if (request.body){
+    db.stories.updateOne(story_id,    //update the text and title
+      {$set: {
         ['chapters.'+ (request.body.index)+'.text']: request.body.text,
         ['chapters.'+ (request.body.index)+'.title']: request.body.title
-    }});
-  /*
-  //otherwise the author wants to create a new chapter
-  const chapter = {
-    title: `create a title...`,
-    text: `write a story...`
-  }
-  db.stories.updateOne(story_id,
-  {chapters: {$push: chapter }});
-  console.log("added chapter to database");
-*/
-
+      }},function(error, story));
+      console.log(request.body.text);
+  }else{
+    //otherwise the author wants to create a new chapter
+    const chapter = {
+      title: "create a title...",
+      text: "write a story..."
+    }
+    // not adding correctly here but still saving stories correctly
+    db.stories.updateOne(story_id, {$push: {chapters: chapter }});
+    console.log("added chapter to database");
+    }
 });
 
 
