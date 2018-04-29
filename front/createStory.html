@@ -53,7 +53,10 @@
               $('#header').text(story.title);
               $('#summary').text(story.summary);
             }
+
           });
+
+
           // can manually add new chapters
           $('#chapterAdd').on('click', function() {
             const selector = document.getElementById('chapterSelector');
@@ -62,6 +65,7 @@
             option.value = option.text = ("Chapter"+" "+x);
             selector.add(option)
           });
+
           // when a chapter is selected change the text box to the database.array[x] text
           $('#chapterSelector').on('change', function(){
             const selector = $(this);
@@ -74,8 +78,10 @@
               const text = chapterText.replace(/^\s+/mg, "<br/>");
               $('#currentChapter').html('<pre>' + text + '</pre>');
               $('#chapter_title').text(chapterTitle);
+
               });
           });
+
           // when the publish button is clicked save the new updated text to db
           $('#publish').on('click', function(){
             const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
@@ -109,6 +115,7 @@
             // we'll only let them start with one chapter for a new story
             $('#chapterAdd').remove();
             $('#chapterSelector').remove();
+
             // when the publish button is clicked save the new updated text to db
             $('#publish').on('click', function(){
               const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text

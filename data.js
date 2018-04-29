@@ -8,8 +8,7 @@ db.createCollection('stories', {validator: {$and: [
   {'author.name': {$type: 'string', $ne: ''}},
   {title: {$type: 'string', $ne: ''}},
   {summary: {$type: 'string'}}, // can be no summary if person chooses
-  {chapters: {$type: 'array'}},
-  {favorites: {$type: 'array'}}  // array of people who have favorited this story
+  {chapters: {$type: 'array'}}
 ]}});
 
 db.createCollection('profiles', {validator: {$and: [
@@ -44,8 +43,7 @@ const long = db.stories.insertOne({
     Aenean maximus interdum ex, id imperdiet justo lacinia id. Curabitur sagittis risus ut imperdiet volutpat. Fusce tempus dapibus augue vitae tristique. Pellentesque iaculis, elit pellentesque efficitur finibus, magna velit tempor arcu, et efficitur enim diam vitae diam. Duis dignissim viverra ipsum. Aliquam quis luctus augue, quis scelerisque sem. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
     Duis quis felis neque. Sed sit amet odio lorem. Donec suscipit vehicula orci, in condimentum mauris auctor in. Aenean sed sapien gravida elit volutpat cursus ut a urna. Nunc ultricies felis in ultricies posuere. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel nibh a sapien hendrerit volutpat vel nec odio. Duis interdum scelerisque quam, a consequat odio rhoncus in. Quisque odio ipsum, dignissim mollis scelerisque ut, consequat eget mauris. Cras et dolor tortor. Vivamus posuere cursus laoreet. Sed a molestie ligula. Nunc lorem nisl, pretium a velit vulputate, laoreet efficitur libero. Aliquam sed feugiat ipsum, at aliquam erat. Suspendisse sed laoreet lorem.`
-  }],
-  favorites: []
+  }]
 });
 
 const short = db.stories.insertOne({
@@ -60,8 +58,7 @@ const short = db.stories.insertOne({
     Etiam vitae libero sed orci semper ultricies. Curabitur mattis nulla quis diam maximus tincidunt. Phasellus mollis lobortis augue, vel tincidunt orci pretium at. Morbi non lacus sit amet quam volutpat feugiat id ut ante. Morbi tristique nulla et hendrerit varius. Nulla blandit iaculis mattis. Donec sollicitudin congue nibh eget finibus. Phasellus in pellentesque tortor. Vestibulum bibendum venenatis dictum. In elementum, tellus scelerisque tempor tincidunt, ante arcu tincidunt arcu, at pretium erat ex non lectus. Nam dictum luctus sapien.
 
     Etiam lorem dui, aliquet id fermentum at, rutrum eget felis. Nulla in ligula orci. Integer rutrum, leo tempus cursus mattis, massa dolor laoreet neque, vitae ullamcorper mauris tellus vel magna. Integer lobortis massa at nulla aliquam congue et at augue. Vestibulum rhoncus eros sit amet aliquet venenatis. In ultrices magna ac pellentesque cursus. Proin in sollicitudin nulla, sit amet venenatis ante. Sed odio tellus, hendrerit at molestie at, consequat vel libero. Duis sollicitudin quam purus, in pulvinar mauris ultricies a. Etiam ex lorem, pretium sed mollis nec, iaculis id eros. Sed fermentum, turpis ac eleifend sodales, arcu sapien molestie enim, et bibendum mi libero et lacus.`
-  }],
-  favorites: []
+  }]
 });
 
 db.profiles.insertOne({
