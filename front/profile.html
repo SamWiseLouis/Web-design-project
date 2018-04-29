@@ -75,8 +75,6 @@
                   .done(function(story) {
                     if (user) {
                       if (user.id === author_id) {
-                        $('#name').append(`<button id="edit" class="btn float-right">Edit</button>`); // edit button if the logged in user is the author of the profile
-                        $('#storyheader').append(`<button id="new" class="btn float-right">New Story</button>`);
                         $('#stories').append(profileStoriesEditor(story));
                       } else {
                         $('#stories').append(profileStories(story));
@@ -85,6 +83,12 @@
                       $('#stories').append(profileStories(story));
                     };
               });
+            }
+            if (user) {
+              if (user.id === author_id) {
+                $('#name').append(`<button id="edit" class="btn float-right">Edit</button>`); // edit button if the logged in user is the author of the profile
+                $('#storyheader').append(`<button id="new" class="btn float-right">New Story</button>`);
+              }
             }
           }
           });
