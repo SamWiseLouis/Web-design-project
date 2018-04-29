@@ -9,40 +9,25 @@
   </head>
 
   <body class="container" text-center>
-
-    <!-- this page should only show up to the author of a story or to somone who is making a new story-->
-    <!--ergo must be logged in to have gotten here or must be author => implies that you have logged in-->
-
-    <!-- need to find a way to link the title of the page to the storys name-->
-    <h1 id="header" class="text-center display-3"><b>Story Editor</b></h1>
-
-
+    <h1 id="header" class="text-center display-3" contenteditable="true"><b>Story Title</b></h1>
 
     <div id="subheader">
-    <h2 id="chapter_title" class="text-center display 3 "contenteditable="true">Chapter Title</h2>
-    <!-- here is where the chapter summary will be loaded and added to-->
+      <h3 id="summary" class="text-center" contenteditable="true">Summary</h3>
     </div>
 
-    <div id="chapterOptions" width="100%" >
-    <center>
-    <!-- will make a loop so that upon page load this slector will add the number of chapters the story has to the options -->
-    <select id="chapterSelector"class="btn" background-color="#222426">
-    <option value="" selected="true">Chapter</option>
-      <!-- here i need to axcess from the story the number of chapters and the writing associated with each chapter -->
-    </select>
-    <button id="chapterAdd"  type="click" class="btn btn-secondary" >Add Chapter</button>
-    <button id="chapterSave" type="click" class="btn btn-secondary" >Save Chapter</button>
-    </center>
+    <div id="chapterOptions" width="100%" class="mt-3">
+      <h3 id="chapter_title" class="text-center float-left" contenteditable="true">Chapter Title</h3>
+      <select id="chapterSelector"class="btn" background-color="#222426">
+        <option value="" selected="true">Chapter</option>
+      </select>
+      <button id="chapterAdd"  type="click" class="btn btn-secondary float-right" >Add Chapter</button>
+      <button id="chapterSave" type="click" class="btn btn-secondary float-right" >Save Chapter</button>
     </div>
 
-    <main id="page">
+    <main id="page" class="mb-5">
       <div id = "Chapter">
-      <!-- the text should be loader from the chaper if any so the author can edit-->
-      <!-- otherwise if new chaper or new story should have placeholder-->
-    <div id="currentChapter" contenteditable="true" overflow="auto"></div>
-    <!-- should return the author to the archive and have saved all changes to each chapter in the story-->
-    <!-- going to need one hell of a post statement here-->
-    </div>
+        <div id="currentChapter" contenteditable="true" overflow="auto"></div>
+      </div>
     </main>
 
     <footer class="bg-dark fixed-bottom p-2">
@@ -51,73 +36,81 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-    // this is where the story editor will teather to the story clicked and actually allow editing and chapter to be grabbed
-
-
-    //automatically generate the right number of chapters according to the story saved in database
-  const id = new URLSearchParams(window.location.search).get('ID');
-    // get the story by the id
-    $.ajax({method: 'GET', url: `/stories/${id}`})
-    .done(function(story){
-      if(story)
-      for (var i = 0; i < story.chapters.length; i++) {
-        const selector = document.getElementById('chapterSelector');
-        var x = selector.options.length;
-        const option = document.createElement('option');
-        option.value = option.text = ("Chapter"+" "+x);
-        selector.add(option)
-        $('#header').text(story.title);
-      // if their is a chapter one set the selector to start at this chapter
-      }
-
-  });
-
-    // can manually add new chapters
-    $('#chapterAdd').on('click', function() {
-      const selector = document.getElementById('chapterSelector');
-      var x = selector.options.length;
-      const option = document.createElement('option');
-      option.value = option.text = ("Chapter"+" "+x);
-      selector.add(option)
-
-    //  $.ajax({method: 'PATCH', url: `/stories/${id}`})
-    });
-
-    // when a chapter is selected change the text box to the database.array[x] text
-    $('#chapterSelector').on('change', function(){
-      const selector = $(this);
-      $.ajax({method: 'GET', url: `/stories/${id}`})
-      .done(function(story){
-        if(story)
-          var x = selector.prop("selectedIndex");
-          const chapterText = story.chapters[x-1].text;
-          const chapterTitle = story.chapters[x-1].title;
-        const text = chapterText.replace(/^\s+/mg, "<br/>");
-        $('#currentChapter').append('<pre>' + text + '</pre>');
-        $('#chapter_title').text(chapterTitle);
-
+    const id = new URLSearchParams(window.location.search).get('id');
+      // get the story by the id
+      if (id) {
+        $.ajax({method: 'GET', url: `/stories/${id}`})
+        .done(function(story){
+          if(story)
+          for (var i = 0; i < story.chapters.length; i++) {
+            const selector = document.getElementById('chapterSelector');
+            var x = selector.options.length;
+            const option = document.createElement('option');
+            option.value = option.text = ("Chapter"+" "+x);
+            selector.add(option)
+            $('#header').text(story.title);
+            $('#summary').text(story.summary);
+          }
 
         });
-    });
 
-    //when the save chapter button is clicked save the new updated text to db
-      $('#chapterSave').on('click', function(){
-        const updatedText = $('#Chapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
-        const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
-        const chapterIndex = $('#chapterSelector').prop("selectedIndex") -1; // get the chapter
-        const updatebody = {
-          index: chapterIndex,
-          text: updatedText,
-          title: chapterTitle
-        }
-          const id = new URLSearchParams(window.location.search).get('ID');
-          $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
-            .done(function(chapters){
+        // can manually add new chapters
+        $('#chapterAdd').on('click', function() {
+          const selector = document.getElementById('chapterSelector');
+          var x = selector.options.length;
+          const option = document.createElement('option');
+          option.value = option.text = ("Chapter"+" "+x);
+          selector.add(option)
+
+        //  $.ajax({method: 'PATCH', url: `/stories/${id}`})
+        });
+
+        // when a chapter is selected change the text box to the database.array[x] text
+        $('#chapterSelector').on('change', function(){
+          const selector = $(this);
+          $.ajax({method: 'GET', url: `/stories/${id}`})
+          .done(function(story){
+            if(story)
+              var x = selector.prop("selectedIndex");
+              const chapterText = story.chapters[x-1].text;
+              const chapterTitle = story.chapters[x-1].title;
+            const text = chapterText.replace(/^\s+/mg, "<br/>");
+            $('#currentChapter').append('<pre>' + text + '</pre>');
+            $('#chapter_title').text(chapterTitle);
+
+
             });
-      });
+        });
 
-
-
+        //when the save chapter button is clicked save the new updated text to db
+        $('#chapterSave').on('click', function(){
+          const updatedText = $('#Chapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
+          const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
+          const chapterIndex = $('#chapterSelector').prop("selectedIndex") -1; // get the chapter
+          const storyTitle = $('#header').text();
+          const summary_text = $('#summary').text();
+          const updatebody = {
+            index: chapterIndex,
+            text: updatedText,
+            chapter_title: chapterTitle,
+            story_title: storyTitle,
+            summary: summary_text
+          };
+          $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
+            .done(function(){
+              location.reload();
+            });
+          });
+      } else {  // they're making a new story
+      $.ajax({method: 'GET', url: '/user'})
+        .done(function(user) {
+          if (user) {  // make sure they're logged in
+            // we'll only let them start with one chapter for a new story
+            $('#chapterAdd').remove();
+            $('#chapterSelector').remove();
+          }
+        });
+      }
     </script>
   </body>
 </html>

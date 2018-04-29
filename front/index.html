@@ -18,7 +18,6 @@
         <div id="navButtons">
           <button class="btn">Genres</button>
           <button class="btn">Browse</button>
-          <button class="btn" disabled>My Stories</button>
           <button class="btn" disabled>Saved Works</button>
           <button id="profile" class="btn" disabled>My Profile</button>
         </div>
@@ -85,7 +84,7 @@
             .done(function(stories) {
               for (story of stories) {
                 if (story.author.id === user.id) {
-                  $(`#${story._id}`).append(`<span id="editlink" class="badge badge-pill badge-dark float-right"><a href="/createStory?ID=${story._id}" id="editStory">Edit story</a></span>`)
+                  $(`#${story._id}`).append(`<span id="editlink" class="badge badge-pill badge-dark float-right"><a href="/createStory?id=${story._id}" id="editStory">Edit story</a></span>`)
                 }
               }
             });

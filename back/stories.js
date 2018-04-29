@@ -39,7 +39,9 @@ router.patch('/:id', function(request, response, next){
   db.stories.updateOne(story_id,    //update the text and title
     {$set: {
         ['chapters.'+ (request.body.index)+'.text']: request.body.text,
-        ['chapters.'+ (request.body.index)+'.title']: request.body.title
+        ['chapters.'+ (request.body.index)+'.title']: request.body.chapter_title,
+        title: request.body.story_title,
+        summary: request.body.summary
     }});
   /*
   //otherwise the author wants to create a new chapter
