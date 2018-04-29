@@ -75,7 +75,7 @@
                 const chapterText = story.chapters[x-1].text;
                 const chapterTitle = story.chapters[x-1].title;
               const text = chapterText.replace(/^\s+/mg, "<br/>");
-              $('#currentChapter').append('<pre>' + text + '</pre>');
+              $('#currentChapter').html('<pre>' + text + '</pre>');
               $('#chapter_title').text(chapterTitle);
 
 

@@ -48,8 +48,8 @@ router.patch('/:id', function(request, response, next){
   if (request.body.index > -1){
     db.stories.updateOne(story_id,  // update includes a chapter update
       {$set: {
-        ['chapters.'+ (request.body.index)+'.text']: request.body.text,
-        ['chapters.'+ (request.body.index)+'.title']: request.body.chapter_title,
+        ['chapters.' + request.body.index + '.text']: request.body.text,
+        ['chapters.' + request.body.index + '.title']: request.body.chapter_title,
         title: request.body.story_title,
         summary: request.body.summary
     }}, function(error, report) {
