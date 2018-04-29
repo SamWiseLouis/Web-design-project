@@ -2,12 +2,18 @@ html{
   overflow: auto;
   padding: 2%;
 }
+
+pre{
+    white-space: pre-wrap;
+}
+
 body{
   background-color: #b8b8b8;
   border: thick solid purple;
   overflow: auto;
   height: 100%;
 }
+
 #header{
   width: 100%;
   border-radius: 15px;

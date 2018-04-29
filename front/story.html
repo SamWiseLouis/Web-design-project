@@ -62,7 +62,8 @@
       $('#storyInfo').append(story.summary);
       if (chapter_number <= story.chapters.length) {
         $('#chapterTitle').append(chapter.title);
-        $('#chapterText').append(chapter.text);
+        const text = chapter.text.replace(/^\s+/mg, "<br/>");
+        $('#chapterText').append('<pre>' + text + '</pre>');
       }
     };
 

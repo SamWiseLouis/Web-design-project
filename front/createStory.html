@@ -31,7 +31,7 @@
       <!-- here i need to axcess from the story the number of chapters and the writing associated with each chapter -->
     </select>
     <button id="chapterAdd"  type="click" class="btn btn-secondary" >Add Chapter</button>
-    <button id="chapterSave" type="click" class="btn btn-secondary" >save Chapter</button>
+    <button id="chapterSave" type="click" class="btn btn-secondary" >Save Chapter</button>
     </center>
     </div>
 
@@ -43,7 +43,6 @@
     <!-- should return the author to the archive and have saved all changes to each chapter in the story-->
     <!-- going to need one hell of a post statement here-->
     </div>
-    <button type="submit" id="publish" class="btn btn-primary" >publish Update</button>
     </main>
 
     <footer class="bg-dark fixed-bottom p-2">
@@ -57,7 +56,6 @@
 
     //automatically generate the right number of chapters according to the story saved in database
   const id = new URLSearchParams(window.location.search).get('ID');
-  console.log(id)
     // get the story by the id
     $.ajax({method: 'GET', url: `/stories/${id}`})
     .done(function(story){
@@ -69,7 +67,6 @@
         option.value = option.text = ("Chapter"+" "+x);
         selector.add(option)
         $('#header').text(story.title);
-        console.log(story.author.name)
       // if their is a chapter one set the selector to start at this chapter
       }
 
@@ -82,7 +79,6 @@
       const option = document.createElement('option');
       option.value = option.text = ("Chapter"+" "+x);
       selector.add(option)
-      console.log("chapter added")
 
     //  $.ajax({method: 'PATCH', url: `/stories/${id}`})
     });
@@ -94,12 +90,10 @@
       .done(function(story){
         if(story)
           var x = selector.prop("selectedIndex");
-          console.log(x-1);
           const chapterText = story.chapters[x-1].text;
           const chapterTitle = story.chapters[x-1].title;
-          console.log(chapterText);
-          console.log(chapterTitle);
-        $('#currentChapter').append(chapterText);
+        const text = chapterText.replace(/^\s+/mg, "<br/>");
+        $('#currentChapter').append('<pre>' + text + '</pre>');
         $('#chapter_title').text(chapterTitle);
 
 
@@ -108,11 +102,9 @@
 
     //when the save chapter button is clicked save the new updated text to db
       $('#chapterSave').on('click', function(){
-        const updatedText = $('#Chapter').text(); //get the current updated text
+        const updatedText = $('#Chapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
         const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
         const chapterIndex = $('#chapterSelector').prop("selectedIndex") -1; // get the chapter
-        console.log(updatedText);
-        console.log(chapterIndex);
         const updatebody = {
           index: chapterIndex,
           text: updatedText,
@@ -121,7 +113,6 @@
           const id = new URLSearchParams(window.location.search).get('ID');
           $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
             .done(function(chapters){
-                console.log("updated")
             });
       });
 
