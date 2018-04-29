@@ -33,28 +33,57 @@ router.get('/:id', function(request, response, next) {
 });
 
 router.patch('/:id', function(request, response, next){
+  // access control: user must be the author of the story
   const story_id = {_id: new mongodb.ObjectId(request.params.id)};
-  const chapters = {_id: new mongodb.ObjectId(request.params.chapters)};
+  db.stories.findOne(story_id, function(error, story) {
+    if (error) return next(error);
+    if (!story) return next(new Error('Not found'));
+    if (request.user && (story.author.id !== request.user.id)) {
+      return next(Error('Forbidden'));
+    } else if (!request.user){
+      return next(Error('Forbidden'));
+    }
+  });
   // then it is an update of an existing chapter
-  if (request.body){
-    db.stories.updateOne(story_id,    //update the text and title
+  if (request.body.index > -1){
+    db.stories.updateOne(story_id,  // update includes a chapter update
       {$set: {
-        ['chapters.'+ (request.body.index)+'.text']: request.body.text,
-        ['chapters.'+ (request.body.index)+'.title']: request.body.title
-      }},function(error, story));
-      console.log(request.body.text);
-  }else{
-    //otherwise the author wants to create a new chapter
-    const chapter = {
-      title: "create a title...",
-      text: "write a story..."
-    }
-    // not adding correctly here but still saving stories correctly
-    db.stories.updateOne(story_id, {$push: {chapters: chapter }});
-    console.log("added chapter to database");
-    }
+        ['chapters.' + request.body.index + '.text']: request.body.text,
+        ['chapters.' + request.body.index + '.title']: request.body.chapter_title,
+        title: request.body.story_title,
+        summary: request.body.summary
+    }}, function(error, report) {
+      if (error) return next(error);
+      if (!report.matchedCount) return next(new Error('Not found'));
+      response.end();
+    });
+  } else {
+    db.stories.updateOne(story_id,  // update is only for the title or summary
+      {$set: {
+        title: request.body.story_title,
+        summary: request.body.summary
+    }}, function(error, report) {
+      if (error) return next(error);
+      if (!report.matchedCount) return next(new Error('Not found'));
+      response.end();
+    });
+  }
 });
 
+router.post('/', function(request, response, next) {
+  if (!request.user) return next(new Error('Forbidden'));  // access control: user must be logged in
 
+  const story = {
+    title: request.body.story_title,
+    summary: request.body.summary,
+    author: {id: request.body.user.id, name: request.body.user.name},
+    chapters: [{title: request.body.chapter_title, text: request.body.text}]
+  };
+
+  db.stories.insertOne(story, function(error) {
+    if (error) return next(error);
+    response.json(story);
+  });
+});
 
 module.exports = router;
