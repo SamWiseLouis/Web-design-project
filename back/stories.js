@@ -34,15 +34,18 @@ router.get('/:id', function(request, response, next) {
 
 router.patch('/:id', function(request, response, next){
   const story_id = {_id: new mongodb.ObjectId(request.params.id)};
-// then it is an update of an existing chapter
-
-  db.stories.updateOne(story_id,    //update the text and title
-    {$set: {
+  const chapters = {_id: new mongodb.ObjectId(request.params.chapters)};
+  // then it is an update of an existing chapter
+  if (request.body){
+    db.stories.updateOne(story_id,    //update the text and title
+      {$set: {
         ['chapters.'+ (request.body.index)+'.text']: request.body.text,
         ['chapters.'+ (request.body.index)+'.title']: request.body.chapter_title,
         title: request.body.story_title,
         summary: request.body.summary
     }});
+  }
+});
   /*
   //otherwise the author wants to create a new chapter
   const chapter = {
@@ -53,8 +56,6 @@ router.patch('/:id', function(request, response, next){
   {chapters: {$push: chapter }});
   console.log("added chapter to database");
 */
-
-});
 
 
 
