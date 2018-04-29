@@ -33,8 +33,17 @@ router.get('/:id', function(request, response, next) {
 });
 
 router.patch('/:id', function(request, response, next){
+  // access control: user must be the author of the story
   const story_id = {_id: new mongodb.ObjectId(request.params.id)};
-  const chapters = {_id: new mongodb.ObjectId(request.params.chapters)};
+  db.stories.findOne(story_id, function(error, story) {
+    if (error) return next(error);
+    if (!story) return next(new Error('Not found'));
+    if (request.user && (story.author.id !== request.user.id)) {
+      return next(Error('Forbidden'));
+    } else if (!request.user){
+      return next(Error('Forbidden'));
+    }
+  });
   // then it is an update of an existing chapter
   if (request.body){
     db.stories.updateOne(story_id,    //update the text and title
@@ -43,7 +52,11 @@ router.patch('/:id', function(request, response, next){
         ['chapters.'+ (request.body.index)+'.title']: request.body.chapter_title,
         title: request.body.story_title,
         summary: request.body.summary
-    }});
+    }}, function(error, report) {
+      if (error) return next(error);
+      if (!report.matchedCount) return next(new Error('Not found'));
+      response.end();
+    });
   }
 });
   /*
