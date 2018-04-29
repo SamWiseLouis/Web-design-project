@@ -11,6 +11,7 @@ a:hover {
 .btn {
   background-color: #8c1580;
   border-color: #8c1580;
+  color: white;
 }
 
 .btn:disabled {

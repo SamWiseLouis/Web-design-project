@@ -40,6 +40,16 @@
     `);
   };
 
+  const profileStoriesEditor = function(story) {
+    return $(`
+      <div class="border">
+        <h5 class="card-title"><a href="story?id=${story._id}">${story.title}</a></h5>
+        <p class="card-text">${story.summary}</p>
+        <button id="${story._id}" class="btn btn-secondary">Edit</button>
+      </div>
+    `);
+  };
+
   const author_id = new URLSearchParams(window.location.search).get('author');
   $.ajax({method: 'GET', url: '/user'})
     .done(function(user) {
@@ -63,16 +73,20 @@
               for (story_id of profile.story_ids) {
                 $.ajax({method: 'GET', url: `/stories/${story_id}`})
                   .done(function(story) {
-                    $('#stories').append(profileStories(story));
-                  });
-              }
+                    if (user) {
+                      if (user.id === author_id) {
+                        $('#name').append(`<button id="edit" class="btn float-right">Edit</button>`); // edit button if the logged in user is the author of the profile
+                        $('#storyheader').append(`<button id="new" class="btn float-right">New Story</button>`);
+                        $('#stories').append(profileStoriesEditor(story));
+                      } else {
+                        $('#stories').append(profileStories(story));
+                      }
+                    } else {
+                      $('#stories').append(profileStories(story));
+                    };
+              });
             }
-            if (user) {
-              if (user.id === author_id) {
-                $('#name').append(`<button id="edit" class="btn float-right">Edit</button>`); // edit button if the logged in user is the author of the profile
-                $('#storyheader').append(`<button id="new" class="btn float-right">New Story</button>`);
-              }
-            }
+          }
           });
       }
     });
@@ -81,8 +95,12 @@
       $(location).attr('href', `editProfile?id=${author_id}`);
     });
 
-    $('#story').on('click', 'button', function() {
+    $('#storyheader').on('click', 'button', function() {
       $(location).attr('href', `createStory`);
+    });
+
+    $('#stories').on('click', 'button', function() {
+      $(location).attr('href', `createStory?id=${$(this).attr('id')}`);
     });
 
   </script>
