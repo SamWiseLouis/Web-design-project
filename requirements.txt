@@ -1,3 +1,9 @@
+Features due by 5/10:
+ 1) Any user can filter stories by useful criteria (author, genre, etc.)
+ 2) Any user can comment on a story.
+
+------------------------------------------------------------------------------
+
 Features due by 4/30:
  1) A logged-in user can create an author profile.
  2) A logged-in author can edit the information in their profile.
