@@ -7,3 +7,6 @@ https://www.w3schools.com/tags/tag_select.asp
 
 redirect:
 https://stackoverflow.com/questions/503093/how-do-i-redirect-to-another-webpage
+
+preserve line breaks:
+https://stackoverflow.com/questions/248011/how-do-i-wrap-text-in-a-pre-tag
