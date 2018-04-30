@@ -43,7 +43,8 @@ const long = db.stories.insertOne({
     Aenean maximus interdum ex, id imperdiet justo lacinia id. Curabitur sagittis risus ut imperdiet volutpat. Fusce tempus dapibus augue vitae tristique. Pellentesque iaculis, elit pellentesque efficitur finibus, magna velit tempor arcu, et efficitur enim diam vitae diam. Duis dignissim viverra ipsum. Aliquam quis luctus augue, quis scelerisque sem. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
     Duis quis felis neque. Sed sit amet odio lorem. Donec suscipit vehicula orci, in condimentum mauris auctor in. Aenean sed sapien gravida elit volutpat cursus ut a urna. Nunc ultricies felis in ultricies posuere. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel nibh a sapien hendrerit volutpat vel nec odio. Duis interdum scelerisque quam, a consequat odio rhoncus in. Quisque odio ipsum, dignissim mollis scelerisque ut, consequat eget mauris. Cras et dolor tortor. Vivamus posuere cursus laoreet. Sed a molestie ligula. Nunc lorem nisl, pretium a velit vulputate, laoreet efficitur libero. Aliquam sed feugiat ipsum, at aliquam erat. Suspendisse sed laoreet lorem.`
-  }]
+  }],
+
 });
 
 const short = db.stories.insertOne({
@@ -59,7 +60,23 @@ const short = db.stories.insertOne({
 
     Etiam lorem dui, aliquet id fermentum at, rutrum eget felis. Nulla in ligula orci. Integer rutrum, leo tempus cursus mattis, massa dolor laoreet neque, vitae ullamcorper mauris tellus vel magna. Integer lobortis massa at nulla aliquam congue et at augue. Vestibulum rhoncus eros sit amet aliquet venenatis. In ultrices magna ac pellentesque cursus. Proin in sollicitudin nulla, sit amet venenatis ante. Sed odio tellus, hendrerit at molestie at, consequat vel libero. Duis sollicitudin quam purus, in pulvinar mauris ultricies a. Etiam ex lorem, pretium sed mollis nec, iaculis id eros. Sed fermentum, turpis ac eleifend sodales, arcu sapien molestie enim, et bibendum mi libero et lacus.`
   }]
+  ]
 });
+
+
+// making a seperte collection for the comments
+// allows the stories to find comments that match their own id
+db.createCollection('Story_Comments', {validator: {$and: [
+  {subject_id: {$type: 'string', $ne: ''}},
+  {'author.name': {$type: 'string', $ne: ''}},
+  {text: {$type: 'string', $ne: ''}}  // array of story ids written by this author
+]}});
+
+const comment = db.stories.comments.insertOne({
+  subject_id:
+
+
+})
 
 db.profiles.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
