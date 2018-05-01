@@ -60,23 +60,7 @@ const short = db.stories.insertOne({
 
     Etiam lorem dui, aliquet id fermentum at, rutrum eget felis. Nulla in ligula orci. Integer rutrum, leo tempus cursus mattis, massa dolor laoreet neque, vitae ullamcorper mauris tellus vel magna. Integer lobortis massa at nulla aliquam congue et at augue. Vestibulum rhoncus eros sit amet aliquet venenatis. In ultrices magna ac pellentesque cursus. Proin in sollicitudin nulla, sit amet venenatis ante. Sed odio tellus, hendrerit at molestie at, consequat vel libero. Duis sollicitudin quam purus, in pulvinar mauris ultricies a. Etiam ex lorem, pretium sed mollis nec, iaculis id eros. Sed fermentum, turpis ac eleifend sodales, arcu sapien molestie enim, et bibendum mi libero et lacus.`
   }]
-  ]
 });
-
-
-// making a seperte collection for the comments
-// allows the stories to find comments that match their own id
-db.createCollection('Story_Comments', {validator: {$and: [
-  {subject_id: {$type: 'string', $ne: ''}},
-  {'author.name': {$type: 'string', $ne: ''}},
-  {text: {$type: 'string', $ne: ''}}  // array of story ids written by this author
-]}});
-
-const comment = db.stories.comments.insertOne({
-  subject_id:
-
-
-})
 
 db.profiles.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},

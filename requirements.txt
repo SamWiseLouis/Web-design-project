@@ -11,6 +11,22 @@ Features due by 4/30:
  4) A logged-in author can add a chapter to a story.
  5) A logged-in author can edit chapters.
 
+Feedback:
+- Completed 5/5 requirements.
+- At the moment the button to create a new story isn't available unless you already have a story.
+- Similarly, for some reason I don't see the Edit Profile button unless I have already created a story.
+- After POST and PATCH requests, ideally you would end up on a page where you can see that the request succeeded.
+- In the chapter selects, can you get rid of the generic "Chapters" option and just have it default to Chapter 1?
+- Contemplate merging the view-story and edit-story features onto one page, since there's a lot of overlap between them.
+- Contemplate merging some of your CSS files, rather than having a separate one for every HTML page. You may only really need one style.css.
+- Obviously you'll want to remove any tabs on the home page that don't end up getting their features implemented.
+- The green home-page header seems kind of at odds with the rest of your color scheme.
+- It's a little hard to read black text against the dark purple.
+- There are some access control issues, not on the front end, but on the back end:
+  - It is possible for a logged-in user to post a story under another user's name, because your server is trusting users to tell you who they are.
+  - It is possible for any user to create or edit any other user's profile, because your server is trusting users to tell you who they are.
+  - There's a race condition in story editing - the find operation isn't guaranteed to finish before the update operation begins.
+
 ------------------------------------------------------------------------------
 
 Features due by 4/16:
@@ -20,8 +36,8 @@ Features due by 4/16:
  4) Ability to log in and log out.
 
 Sample data you'll probably need to demonstrate these features:
-- An authors collection (with a couple of authors)
-- A stories collection (with a handful of stories)
+- An authors collection (with a couple of authors).
+- A stories collection (with a handful of stories).
 
 Feedback:
 - Completed 4/4 requirements.
