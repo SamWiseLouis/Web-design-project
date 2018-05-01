@@ -23,7 +23,7 @@ router.get('/:id', function(request, response, next) {
 });
 
 router.patch('/:id', function(request, response, next) {
-  if (request.params.id !== request.body.user) {  // access control
+  if (request.params.id !== request.user.id) {  // access control: user must be the profile author
     return next(new Error('Forbidden'));
   }
   const profile = {'author.id': request.params.id};
@@ -54,19 +54,25 @@ router.post('/', function(request, response, next) {
   if (!request.body.user) return next(new Error('Forbidden'));  // access control: user must be logged in
 
   // access control: user can't already have a profile
-  db.profiles.findOne({'author.id': request.body.user}, function(error, profile) {
-    if (profile) return;  // they already have a profile, so we won't let them make a new one
-  });
-  const profile = {
-    author: {id: request.body.user, name: request.body.name},
-    desc: request.body.desc,
-    story_ids: []
-  };
+  db.profiles.findOne({'author.id': request.user.id}, function(error, profile) {
+    if (profile) {
+      return next(new Error('Forbidden'));
+    } else {
+      // access control: user must be the author of the new profile
+      if (request.user.id != request.body.user || request.user.name != request.body.name) return next(new Error('Forbidden'));
 
-  db.profiles.insertOne(profile, function(error) {
-    if (error) return next(error);
-    response.json(profile);
+        const profile = {
+          author: {id: request.body.user, name: request.body.name},
+          desc: request.body.desc,
+          story_ids: []
+        };
+
+        db.profiles.insertOne(profile, function(error) {
+          if (error) return next(error);
+          response.json(profile);
+        });
+      }
+    });
   });
-});
 
 module.exports = router;

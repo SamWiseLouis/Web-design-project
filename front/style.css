@@ -1,49 +1,129 @@
-body{
+body {
   background-color: #b8b8b8;
 }
-#header{
+
+html {
   overflow: auto;
+  padding: 2%;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+#pageBody {
+  border: thick solid purple;
+  overflow: auto;
+  height: 100%;
+}
+
+#creatorHeader {
+  width: 100%;
+  border-radius: 15px;
+  text-align: center;
+  border-color: purple;
+  background-color:  #f2f2f2;
+  box-sizing: border-box;
+}
+
+#subheader {
+  border-radius: 10px;
+  padding: 3%;
+  text-align: center;
+}
+
+#summary {
+  background: #f2f2f2;
+  width: 100%;
+}
+
+#chapterOptions {
+  overflow: auto;
+  margin-top: 2%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  background-color: #f7f7f8;
+  border-radius: 10px 10px 0px 0px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+
+#chapterAdd {
+  float: right;
+}
+
+
+#currentChapter {
+  width: 100%;
+  height: 400px ;
+  overflow: auto;
+  background: white;
+  box-sizing:border-box;
+}
+
+#chapterSelector {
+  background-color: #222426;
+  color: white;
+}
+
+#publish {
+  float: right;
+}
+
+#chapterText {
+  background: #ffffff;
+}
+
+#headerHome {
   height: 8%;
-  border: 5px solid black;
-  background-color: #37be64;
+  border: 5px solid white;
+  background-color: #8c1580;
   box-sizing: border-box;
   border-radius: 1%;
+  color: white;
 }
-h1{
+
+#head {
   float: right;
   width: 82.2%;
   height: 9%;
 
   box-sizing: border-box;
 }
-img{
+
+img {
   width: 17.8%;
   box-sizing: border-box;
 }
 
 
-#navigation{
+#navigation {
   width: 100%;
   box-sizing: border-box;
 }
-#navButtons{
+
+#navButtons {
   float: left;
   width: 50%;
   overflow: auto;
     box-sizing: border-box;
 }
-#searchbar{
+
+#searchbar {
   float:right;
   overflow: auto;
   width: 50%;
   box-sizing: border-box;
 }
-#findButton{
+
+#findButton {
   float: right;
   width:20%;
   box-sizing: border-box;
 }
-#find{
+
+#find {
   float: right;
   width: 50%;
   box-sizing: border-box;
@@ -71,6 +151,7 @@ a:hover {
 .btn {
   background-color: #8c1580;
   border-color: #8c1580;
+  color: white;
 }
 
 .btn:disabled {
@@ -88,4 +169,8 @@ a:hover {
   background-color: white;
   color: black;
   border-color: white;
+}
+
+.card {
+  border: thin solid purple;
 }

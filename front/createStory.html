@@ -4,15 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="storyStyle.css">
-    <title>CreateStory</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Create Story</title>
   </head>
 
-  <body class="container" text-center>
-    <h1 id="header" class="text-center display-3" contenteditable="true"><b>Story Title</b></h1>
+  <body id="pageBody" class="container" text-center>
+    <h1 id="creatorHeader" class="text-center display-3" contenteditable="true"><b>Story Title</b></h1>
 
     <div id="subheader">
       <h3 id="summary" class="text-center" contenteditable="true">Summary</h3>
+      <p id="successText"></p>
     </div>
 
     <div id="chapterOptions" width="100%" class="mt-3">
@@ -20,7 +21,7 @@
     </div>
 
     <main id="page" class="mb-5">
-      <div id = "Chapter">
+      <div id="Chapter">
         <div id="currentChapter" contenteditable="true" overflow="auto"></div>
         <button id="publish" class="btn btn-econdary">Publish</button>
       </div>
@@ -33,24 +34,32 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     const id = new URLSearchParams(window.location.search).get('id');
+    const success = new URLSearchParams(window.location.search).get('success');
       // get the story by the id
       if (id) {
-        $('#chapterOptions').append('<select id="chapterSelector"class="btn" background-color="#222426"><option value="" selected="true">Chapters</option></select><button id="chapterAdd"  type="click" class="btn btn-secondary float-right" >Add Chapter</button>');
+        if (success) {
+          $("#successText").text("Successfully submitted story.");
+        }
+        $('#chapterOptions').append('<select id="chapterSelector"class="btn" background-color="#222426"><option value="" selected="true">Chapter 1</option></select><button id="chapterAdd"  type="click" class="btn btn-secondary float-right" >Add Chapter</button>');
         $.ajax({method: 'GET', url: '/user'})
           .done(function(user) {
         if (user) {
           $.ajax({method: 'GET', url: `/stories/${id}`})
           .done(function(story){
-            for (var i = 0; i < story.chapters.length; i++) {
+            $('#creatorHeader').text(story.title);
+            $('#summary').text(story.summary);
+            const chapterText = story.chapters[0].text;
+            const chapterTitle = story.chapters[0].title;
+            const text = chapterText.replace(/^\s+/mg, "<br/>");
+            $('#currentChapter').html('<pre>' + text + '</pre>');
+            $('#chapter_title').text(chapterTitle);
+            for (var i = 1; i < story.chapters.length; i++) {
               const selector = document.getElementById('chapterSelector');
-              var x = selector.options.length;
+              var x = selector.options.length + 1;
               const option = document.createElement('option');
               option.value = option.text = ("Chapter"+" "+x);
               selector.add(option)
-              $('#header').text(story.title);
-              $('#summary').text(story.summary);
             }
-
           });
 
 
@@ -68,10 +77,9 @@
             const selector = $(this);
             $.ajax({method: 'GET', url: `/stories/${id}`})
             .done(function(story){
-              if(story)
-                var x = selector.prop("selectedIndex");
-                const chapterText = story.chapters[x-1].text;
-                const chapterTitle = story.chapters[x-1].title;
+              var x = selector.prop("selectedIndex") + 1;
+              const chapterText = story.chapters[x-1].text;
+              const chapterTitle = story.chapters[x-1].title;
               const text = chapterText.replace(/^\s+/mg, "<br/>");
               $('#currentChapter').html('<pre>' + text + '</pre>');
               $('#chapter_title').text(chapterTitle);
@@ -83,8 +91,8 @@
           $('#publish').on('click', function(){
             const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
             const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
-            const chapterIndex = $('#chapterSelector').prop("selectedIndex") -1; // get the chapter
-            const storyTitle = $('#header').text();
+            const chapterIndex = $('#chapterSelector').prop("selectedIndex"); // get the chapter
+            const storyTitle = $('#creatorHeader').text();
             const summary_text = $('#summary').text();
             const updatebody = {
               index: chapterIndex,
@@ -98,7 +106,7 @@
                 alert("Could not update story!");
               })
               .done(function() {
-                location.reload();
+                $(location).attr('href', `createStory?id=${id}&success=true`);
               });
             });
           } else {
@@ -117,7 +125,7 @@
             $('#publish').on('click', function(){
               const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); //get the current updated text
               const chapterTitle = $('#chapter_title').text(); // get the curent chapter text
-              const storyTitle = $('#header').text();
+              const storyTitle = $('#creatorHeader').text();
               const summary_text = $('#summary').text();
               const updatebody = {
                 text: updatedText,
@@ -136,7 +144,7 @@
                       alert("Could not post story!");
                     })
                     .done(function() {
-                      location.reload();
+                      $("#successText").text("Successfully updated story.");
                     });
                 });
               });

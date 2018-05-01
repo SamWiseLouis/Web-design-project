@@ -8,18 +8,16 @@
     <title>Hub Archive</title>
   </head>
   <body class="container">
-    <div id="header">
-      <h1 class="text-center display-3" width="100%"><b>The Hub</b></h1>
+    <div id="headerHome">
+      <h1 id="head" class="text-center display-3" width="100%"><b>The Hub</b></h1>
       <img src="https://media.giphy.com/media/K3kR9EZj8Uwk8/giphy.gif">
 
     </div>
     <div>
       <form id="navigation" class="my-2">
         <div id="navButtons">
-          <button class="btn">Genres</button>
-          <button class="btn">Browse</button>
-          <button class="btn" disabled>Saved Works</button>
           <button id="profile" class="btn" disabled>My Profile</button>
+          <button id="create" class="btn" disabled>Create Story</button>
         </div>
       </form>
       <form id="searchNavigation">
@@ -76,8 +74,6 @@
         self = user;
         if (user) {
           $('#log').attr('href', '/logout').text('Log out');
-          $('#new_Story :input').prop('disabled', false);
-          $('#new_Story :button').prop('disabled', false);
           $('#navButtons :button').prop('disabled', false);
           $.ajax({method: 'GET', url: '/stories'})
             .done(function(stories) {
@@ -112,6 +108,15 @@
         $(location).attr('href', `profile?author=${self.id}`);
       }
     });
+
+    $('#create').on('click', function(event) {
+      event.preventDefault();
+      if ($('#profile').text() === 'My Profile') {
+        $(location).attr('href', `createStory`);
+      } else {
+        alert("You must have a profile to post a story.");
+      }
+    })
 
     </script>
   </body>

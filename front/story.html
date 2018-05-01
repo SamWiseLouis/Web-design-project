@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="storyStyle.css">
+    <link rel="stylesheet" href="style.css">
   </head>
-  <body>
+  <body id="pageBody">
     <header id="story" class="jumbotron">
       <h1 class="loading">Loading...</h1>
     </header>
@@ -21,13 +21,11 @@
         </ul>
       </div>
 
-      <div id="storyBody" class="card mt-4">
+      <div class="card mt-4">
         <div class="card-header">
           <h3>
             <p id="chapterTitle" class="float-left my-auto"></p>
-            <select class="btn mx-auto float-right" type="button" id="chapterNav">
-              <option selected="true">Chapters</option>
-            </select>
+            <select class="btn mx-auto float-right" type="button" id="chapterNav"></select>
           </h3>
         </div>
         <p id="chapterText" class="card-text mx-3"></p>
@@ -40,7 +38,7 @@
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-    // Get the opinion ID for this page out of the URL
+    // Get the story ID for this page out of the URL
     const story_id = new URLSearchParams(window.location.search).get('id');
     let chapter_number = new URLSearchParams(window.location.search).get('chapter');
     if (!chapter_number) {  // default to the first chapter
@@ -51,10 +49,8 @@
     // then have a bot that holds the tags the genre and the story summary
     const storyHeader = function(story) {
       return $(`
-        <header>
-          <h1>${story.title}</h1>
+          <p><h1>${story.title}</h1></p>
           <p><a href="profile?author=${story.author.id}">${story.author.name}</a></p>
-        </header>
       `);
     };
 
@@ -69,13 +65,13 @@
 
     const chapterMenu = function(number, chapter) {
       return $(`
-        <option>${number}. ${chapter.title}</option>
+        <option value="${number}">${number}. ${chapter.title}</option>
       `);
     };
 
     // Load the story from the database
     $.ajax({method: 'GET', url: `/stories/${story_id}`})
-      .fail(() => $('#story .loading').text('Could not load opinion!'))
+      .fail(() => $('#story .loading').text('Could not load story!'))
       .done(function(story) {
         if (chapter_number < story.chapters.length) {
           $('#chapterButtons').append(`<button id="next" class="btn float-right">Next chapter</button>`);
@@ -94,7 +90,9 @@
     });
 
     $('#chapterNav').on('change', function(){
-      $(location).attr('href', `story?id=${story_id}&chapter=${$(this).prop("selectedIndex")}`);
+      console.log($(this).find("option:selected").val());
+      const n = $(this).prop("selectedIndex") + 1;
+      $(location).attr('href', `story?id=${story_id}&chapter=${n}`);
     });
 
     $('#chapterButtons').on('click', 'button', function() {

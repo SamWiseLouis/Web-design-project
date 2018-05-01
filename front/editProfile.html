@@ -18,7 +18,10 @@
         <input type="text" id="name" class="form-control my-1" autocomplete="off" required>
         <h4>Description</h4>
         <textarea id="desc" class="form-control my-1" required></textarea>
-        <button type="submit" class="btn btn-primary my-1 float-right">Submit</button>
+        <div>
+          <p id="successText"></p>
+          <button type="submit" class="btn btn-primary my-1 float-right">Submit</button>
+        </div>
       </form>
     </main>
 
@@ -30,16 +33,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     const id = new URLSearchParams(window.location.search).get('id');
-    const type = new URLSearchParams(window.location.search).get('type')
-    let self = null;
+    const type = new URLSearchParams(window.location.search).get('type');
+    const success = new URLSearchParams(window.location.search).get('success');
     // double check that the user is the profile author
+    self = null;
     $.ajax({method: 'GET', url: '/user'})
       .done(function(user) {
+        self = user.id
         if (user) {
-          self = user.id;
+          if (success) {
+            $("#successText").text("Successfully updated profile.");
+          }
           $('#log').attr('href', '/logout').text('Log out');
           $('#new :input').prop('disabled', false);
-          if (id === self) {
+          if (id === user.id) {
             $('#name').val(user.name);
             if (id && !type) {
               $.ajax({method: 'GET', url: `/profiles/${id}`})
@@ -62,13 +69,13 @@
         $.ajax({method: 'POST', url: `profiles`, data: profile})
           .fail(() => alert('Could not submit!'))
           .done(function(profile) {
-            $(location).attr('href', `editProfile?id=${id}`);
+            $("#successText").text("Successfully created profile.");
           });
       } else {  // patching an existing profile
         $.ajax({method: 'PATCH', url: `profiles/${id}`, data: profile})
           .fail(() => alert('Could not submit!'))
           .done(function(profile) {
-            location.reload();
+            $(location).attr('href', `editProfile?id=${id}&success=true`);
           });
       }
     });

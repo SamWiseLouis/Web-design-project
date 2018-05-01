@@ -49,6 +49,7 @@ server.use(express.static('front', {extensions: ['html']}));
 // Back end APIs
 server.use('/stories', require('./back/stories'));
 server.use('/profiles', require('./back/profiles'));
+server.use('/comments', require('./back/comments'));
 
 // Login route
 server.get('/auth', passport.authenticate('google', {scope: ['profile']}));
