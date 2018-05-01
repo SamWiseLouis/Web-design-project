@@ -10,3 +10,6 @@ https://stackoverflow.com/questions/503093/how-do-i-redirect-to-another-webpage
 
 preserve line breaks:
 https://stackoverflow.com/questions/248011/how-do-i-wrap-text-in-a-pre-tag
+
+help with setting a selected item for a selector:
+https://stackoverflow.com/questions/4680075/set-selected-option-of-select-box

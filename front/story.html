@@ -73,6 +73,9 @@
     $.ajax({method: 'GET', url: `/stories/${story_id}`})
       .fail(() => $('#story .loading').text('Could not load story!'))
       .done(function(story) {
+        $(function() {
+          $("#chapterNav").val(chapter_number);
+        });
         if (chapter_number < story.chapters.length) {
           $('#chapterButtons').append(`<button id="next" class="btn float-right">Next chapter</button>`);
         }
@@ -90,7 +93,7 @@
     });
 
     $('#chapterNav').on('change', function(){
-      console.log($(this).find("option:selected").val());
+      console.log($('#chapterNav :selected').attr);
       const n = $(this).prop("selectedIndex") + 1;
       $(location).attr('href', `story?id=${story_id}&chapter=${n}`);
     });
