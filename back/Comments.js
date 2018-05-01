@@ -8,8 +8,9 @@ const mongodb = require('mongodb');
 mongodb.MongoClient.connect('mongodb://localhost:27017', function(error, client) {
   if (error) throw error;
   db = client.db('fiction');
-  db.comments = db.collection('Comments');
+  db.comments = db.collection('comments');
 });
+
 
 
 module.exports = router;

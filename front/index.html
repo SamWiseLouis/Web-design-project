@@ -22,8 +22,13 @@
       </form>
       <form id="searchNavigation">
         <div id="searchbar">
-          <button type="submit" id="findButton" class="btn">Search</button>
-          <input type="text" placeholder="search" id="find" class="form-control" autocomplete="off" required>
+          <button type="submit" id="findButton" class="btn float-right">Search</button>
+          <input type="text" placeholder="search" id="find" class="form-control float-right" autocomplete="off" required>
+          <select id="selector"class="btn float-right" background-color="#222426">
+            <option value="author" selected="true">Author</option>
+            <option value="genre">Genre</option>
+            <option value="length">Length</option>
+          </select>
         </div>
       </form>
     </div>

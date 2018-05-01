@@ -18,6 +18,14 @@ db.createCollection('profiles', {validator: {$and: [
   {story_ids: {$type: 'array'}}  // array of story ids written by this author
 ]}});
 
+db.createCollection('comments', {validator: {$and: [
+  {'author.id': {$type: 'string', $ne: ''}},  // will be 'anonymous' for anonymous users
+  {'author.name': {$type: 'string', $ne: ''}},
+  {story_id: {$type: 'objectId', $ne: ''}},
+  {index: {$type: 'integer'}},  // the chapter number the comment was posted on
+  {text: {$type: 'string', $ne: ''}}
+]}});
+
 // test data
 const long = db.stories.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
@@ -43,8 +51,7 @@ const long = db.stories.insertOne({
     Aenean maximus interdum ex, id imperdiet justo lacinia id. Curabitur sagittis risus ut imperdiet volutpat. Fusce tempus dapibus augue vitae tristique. Pellentesque iaculis, elit pellentesque efficitur finibus, magna velit tempor arcu, et efficitur enim diam vitae diam. Duis dignissim viverra ipsum. Aliquam quis luctus augue, quis scelerisque sem. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
     Duis quis felis neque. Sed sit amet odio lorem. Donec suscipit vehicula orci, in condimentum mauris auctor in. Aenean sed sapien gravida elit volutpat cursus ut a urna. Nunc ultricies felis in ultricies posuere. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel nibh a sapien hendrerit volutpat vel nec odio. Duis interdum scelerisque quam, a consequat odio rhoncus in. Quisque odio ipsum, dignissim mollis scelerisque ut, consequat eget mauris. Cras et dolor tortor. Vivamus posuere cursus laoreet. Sed a molestie ligula. Nunc lorem nisl, pretium a velit vulputate, laoreet efficitur libero. Aliquam sed feugiat ipsum, at aliquam erat. Suspendisse sed laoreet lorem.`
-  }],
-
+  }]
 });
 
 const short = db.stories.insertOne({
@@ -74,4 +81,19 @@ db.profiles.insertOne({
   story_ids: [short.insertedId]
 });
 
+db.comments.insertOne({
+  author: {id: '100532274667147041257', name: 'Samuel Emerson'},
+  story_id: long.insertedId,
+  index: 1,
+  text: "I can't believe you've written two whole chapters!"
+});
+
+db.comments.insertOne({
+  author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
+  story_id: short.insertedId,
+  index: 0,
+  text: "Short but sweet."
+});
+
 db.profiles.createIndex({author: 1});
+db.stories.createIndex({_id: 1})
