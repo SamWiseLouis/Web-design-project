@@ -52,9 +52,11 @@ router.patch('/:id', function(request, response, next){
           ['chapters.' + request.body.index + '.title']: request.body.chapter_title,
           title: request.body.story_title,
           summary: request.body.summary
+
       }}, function(error, report) {
         if (error) return next(error);
         if (!report.matchedCount) return next(new Error('Not found'));
+        
         response.end();
       });
     } else {

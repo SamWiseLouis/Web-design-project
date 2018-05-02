@@ -174,3 +174,11 @@ a:hover {
 .card {
   border: thin solid purple;
 }
+#storyFoot{
+list-style: none;
+margin: 0 2px;
+padding: 0;
+display: flex;
+justify-content: space-around;
+
+}
