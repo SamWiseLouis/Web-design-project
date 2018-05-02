@@ -33,7 +33,6 @@
       </form>
     </div>
 
-    <!-- this is where the archive will display all the stories -->
     <main id="stories">
       <p class="loading">Loading stories...</p>
     </main>
@@ -45,11 +44,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
 
-  //basic setup for a story description from the archive
   // should show the title of the story
   // the author of the story
   // and a quick summary
-  // and show how many people liked this story
+  // and show the genres of the story
     const storyArticle = function(story) {
 
       const article = $(`
@@ -63,16 +61,15 @@
           </div>
         </article>
       `);
-      //check to see if user is the story author
-      // No delete option if the user isn't the comment author
+      // check to see if user is the story author
       if (!self || self.id !== story.author.id) {
         article.find('#editlink').remove();
       }
       return article;
     };
 
-    // Check if we're logged in
-    // if logged in then somone may state to create a story
+    // check if we're logged in
+    // if logged in then somone may create a story
     let self = null;
     $.ajax({method: 'GET', url: '/user'})
       .done(function(user) {
@@ -97,7 +94,7 @@
         }
       });
 
-    // Load all stories from the archive
+    // load all stories from the archive
     $.ajax({method: 'GET', url: '/stories'})
       .fail(() => $('#stories .loading').text('Could not load archive!'))
       .done(function(stories) {

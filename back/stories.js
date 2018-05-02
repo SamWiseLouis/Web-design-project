@@ -51,7 +51,8 @@ router.patch('/:id', function(request, response, next){
           ['chapters.' + request.body.index + '.text']: request.body.text,
           ['chapters.' + request.body.index + '.title']: request.body.chapter_title,
           title: request.body.story_title,
-          summary: request.body.summary
+          summary: request.body.summary,
+          tags: request.body.tags
       }}, function(error, report) {
         if (error) return next(error);
         if (!report.matchedCount) return next(new Error('Not found'));
@@ -61,7 +62,8 @@ router.patch('/:id', function(request, response, next){
       db.stories.updateOne(story_id,  // update is only for the title or summary
         {$set: {
           title: request.body.story_title,
-          summary: request.body.summary
+          summary: request.body.summary,
+          tags: request.body.tags
       }}, function(error, report) {
         if (error) return next(error);
         if (!report.matchedCount) return next(new Error('Not found'));
@@ -85,7 +87,8 @@ router.post('/', function(request, response, next) {
       title: request.body.story_title,
       summary: request.body.summary,
       author: {id: request.body.user.id, name: request.body.user.name},
-      chapters: [{title: request.body.chapter_title, text: request.body.text}]
+      chapters: [{title: request.body.chapter_title, text: request.body.text}],
+      tags: request.body.tags
     };
 
     db.stories.insertOne(story, function(error) {

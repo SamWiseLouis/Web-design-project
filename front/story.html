@@ -16,9 +16,7 @@
           <h3 class="card-header">Summary</h3>
           <p id="storyInfo" class="card-text mx-3"></p>
         </div>
-        <ul id="genreTags" class="list-group mx-5 my-3">
-          <li class="list-group-item" style="width: 15rem;">genre</li>
-        </ul>
+        <ul id="storytags" class="list-inline mx-5 my-3"></ul>
       </div>
 
       <div class="card mt-4">
@@ -69,10 +67,17 @@
       `);
     };
 
+    const tagGenerator = function(tags_list) {
+      for (tag of tags_list) {
+        $('#storytags').append(`<li class="list-inline-item btn">${tag}</li>`);
+      }
+    };
+
     // Load the story from the database
     $.ajax({method: 'GET', url: `/stories/${story_id}`})
       .fail(() => $('#story .loading').text('Could not load story!'))
       .done(function(story) {
+        tagGenerator(story.tags);
         $(function() {
           $("#chapterNav").val(chapter_number);
         });
@@ -93,7 +98,6 @@
     });
 
     $('#chapterNav').on('change', function(){
-      console.log($('#chapterNav :selected').attr);
       const n = $(this).prop("selectedIndex") + 1;
       $(location).attr('href', `story?id=${story_id}&chapter=${n}`);
     });
