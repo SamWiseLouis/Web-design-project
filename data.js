@@ -104,3 +104,4 @@ db.comments.insertOne({
 db.profiles.createIndex({author: 1});
 db.stories.createIndex({_id: 1});
 db.stories.createIndex({tags: 1});
+db.stories.createIndex({length: 1});
