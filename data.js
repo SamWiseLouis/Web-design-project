@@ -9,6 +9,7 @@ db.createCollection('stories', {validator: {$and: [
   {title: {$type: 'string', $ne: ''}},
   {summary: {$type: 'string'}}, // can be no summary if person chooses
   {chapters: {$type: 'array'}},
+  {length: {$type: 'integer'}},  // for searching based on length
   {tags: {$type: 'array'}}  // list of genre tags
 ]}});
 
@@ -53,6 +54,7 @@ const long = db.stories.insertOne({
 
     Duis quis felis neque. Sed sit amet odio lorem. Donec suscipit vehicula orci, in condimentum mauris auctor in. Aenean sed sapien gravida elit volutpat cursus ut a urna. Nunc ultricies felis in ultricies posuere. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel nibh a sapien hendrerit volutpat vel nec odio. Duis interdum scelerisque quam, a consequat odio rhoncus in. Quisque odio ipsum, dignissim mollis scelerisque ut, consequat eget mauris. Cras et dolor tortor. Vivamus posuere cursus laoreet. Sed a molestie ligula. Nunc lorem nisl, pretium a velit vulputate, laoreet efficitur libero. Aliquam sed feugiat ipsum, at aliquam erat. Suspendisse sed laoreet lorem.`
   }],
+  length: 2,
   tags: ["Sci-Fi", "Action"]
 });
 
@@ -69,6 +71,7 @@ const short = db.stories.insertOne({
 
     Etiam lorem dui, aliquet id fermentum at, rutrum eget felis. Nulla in ligula orci. Integer rutrum, leo tempus cursus mattis, massa dolor laoreet neque, vitae ullamcorper mauris tellus vel magna. Integer lobortis massa at nulla aliquam congue et at augue. Vestibulum rhoncus eros sit amet aliquet venenatis. In ultrices magna ac pellentesque cursus. Proin in sollicitudin nulla, sit amet venenatis ante. Sed odio tellus, hendrerit at molestie at, consequat vel libero. Duis sollicitudin quam purus, in pulvinar mauris ultricies a. Etiam ex lorem, pretium sed mollis nec, iaculis id eros. Sed fermentum, turpis ac eleifend sodales, arcu sapien molestie enim, et bibendum mi libero et lacus.`
   }],
+  length: 1,
   tags: ["Romance", "Comedy", "Parody"]
 });
 
@@ -99,4 +102,5 @@ db.comments.insertOne({
 });
 
 db.profiles.createIndex({author: 1});
-db.stories.createIndex({_id: 1})
+db.stories.createIndex({_id: 1});
+db.stories.createIndex({tags: 1});

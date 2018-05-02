@@ -16,3 +16,6 @@ https://stackoverflow.com/questions/4680075/set-selected-option-of-select-box
 
 bootstrap tag editor
 https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/examples/
+
+remove element by index in mongodb
+https://stackoverflow.com/questions/4588303/in-mongodb-how-do-you-remove-an-array-element-by-its-index

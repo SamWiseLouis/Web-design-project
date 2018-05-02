@@ -12,14 +12,34 @@ mongodb.MongoClient.connect('mongodb://localhost:27017', function(error, client)
   db.profiles = db.collection('profiles');
 });
 
-// get all the stories
+// get the stories
 router.get('/', function(request, response, next) {
-  const user_id = request.query.user;
-
-  db.stories.find().toArray(function(error, stories) {
-    if (error) return next(error);
-    response.json(stories);
-  });
+  // see if we need to get specifically searched for stories
+  if (request.query.type && request.query.search) {
+    if (request.query.type === "author") {
+      db.stories.find({"author.name": request.query.search}).toArray(function(error, stories) {
+        if (error) return next(error);
+        response.json(stories);
+      });
+    } else if (request.query.type === "genre") {
+      db.stories.find({tags: request.query.search}).toArray(function(error, stories) {
+        if (error) return next(error);
+        response.json(stories);
+      });
+    } else if (request.query.type === "length") {
+      db.stories.find({length: {$gte: parseInt(request.query.search)}}).toArray(function(error, stories) {
+        if (error) return next(error);
+        response.json(stories);
+      });
+    } else {
+      return next(new Error('Bad request'));
+    }
+  } else {  // get all the stories
+    db.stories.find().toArray(function(error, stories) {
+      if (error) return next(error);
+      response.json(stories);
+    });
+  }
 });
 
 // get story by id
@@ -39,9 +59,9 @@ router.patch('/:id', function(request, response, next){
   db.stories.findOne(story_id, function(error, story) {
     if (error) return next(error);
     if (!story) return next(new Error('Not found'));
-    if (request.user && (story.author.id !== request.user.id)) {
+    if (!request.user){
       return next(Error('Forbidden'));
-    } else if (!request.user){
+    } else if (story.author.id !== request.user.id) {
       return next(Error('Forbidden'));
     }
     // here we're safe to update it
@@ -52,11 +72,11 @@ router.patch('/:id', function(request, response, next){
           ['chapters.' + request.body.index + '.title']: request.body.chapter_title,
           title: request.body.story_title,
           summary: request.body.summary,
-          tags: request.body.tags
+          tags: request.body.tags,
+          length: request.body.length
       }}, function(error, report) {
         if (error) return next(error);
         if (!report.matchedCount) return next(new Error('Not found'));
-
         response.end();
       });
     } else {
@@ -64,7 +84,8 @@ router.patch('/:id', function(request, response, next){
         {$set: {
           title: request.body.story_title,
           summary: request.body.summary,
-          tags: request.body.tags
+          tags: request.body.tags,
+          length: request.body.length
       }}, function(error, report) {
         if (error) return next(error);
         if (!report.matchedCount) return next(new Error('Not found'));
@@ -79,7 +100,6 @@ router.post('/', function(request, response, next) {
   // access control: user must be the author of the new story
   if (request.user.id != request.body.user.id || request.user.name != request.body.user.name) return next(new Error('Forbidden'));
   // access control: user must already have a profile to post a story
-
   db.profiles.findOne({'author.id': request.body.user.id}, function(error, profile) {
     if (error) return next(error);
     if (!profile) return next(new Error('Forbidden'));
@@ -89,7 +109,8 @@ router.post('/', function(request, response, next) {
       summary: request.body.summary,
       author: {id: request.body.user.id, name: request.body.user.name},
       chapters: [{title: request.body.chapter_title, text: request.body.text}],
-      tags: request.body.tags
+      tags: request.body.tags,
+      length: request.body.tags.length
     };
 
     db.stories.insertOne(story, function(error) {
@@ -97,6 +118,39 @@ router.post('/', function(request, response, next) {
       response.json(story);
     });
   });
+});
+
+router.delete('/:id', function(request, response, next) {
+  // access control: user must be the author the story to delete a chapter
+  const story_id = {_id: new mongodb.ObjectId(request.params.id)};
+  db.stories.findOne(story_id, function(error, story) {
+    if (error) return next(error);
+    if (!story) return next(new Error('Not found'));
+    if (!request.user){
+      return next(Error('Forbidden'));
+    } else if (story.author.id !== request.user.id) {
+      return next(Error('Forbidden'));
+    }
+    // here we know it's safe to delete
+    // for if it's just one chapter
+    if (request.body.index) {
+      db.stories.updateOne(story_id, {$unset: {[request.body.index]: 1}}, function(error, report) {
+        if (error) return next(error);
+        if (!report.matchedCount) return next(new Error('Not found'));
+        db.stories.updateOne(story_id, {$pull: {chapters: null}}, function(error, report) {
+          if (error) return next(error);
+          if (!report.matchedCount) return next(new Error('Not found'));
+          response.end();
+        });
+      });
+    } else {  // for if we have to delete the whole story
+      db.stories.deleteOne(story_id, function(error) {
+        if (error) return next(error);
+        response.end();
+      });
+    }
+  });
+
 });
 
 module.exports = router;

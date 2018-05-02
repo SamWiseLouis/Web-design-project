@@ -99,14 +99,31 @@
         }
       });
 
-    // load all stories from the archive
-    $.ajax({method: 'GET', url: '/stories'})
-      .fail(() => $('#stories .loading').text('Could not load archive!'))
-      .done(function(stories) {
-        $('#stories .loading').remove();
-        $('#stories').append(stories.map(story => storyArticle(story)));
-        stories.map(story => tagGenerator(story.tags, story._id));
-      });
+    // load stories from the archive
+    // first check if they were searching for a particular kind of story
+    const type = new URLSearchParams(window.location.search).get('type');
+    const search = new URLSearchParams(window.location.search).get('search');
+    if (type && search) {  // we need both
+      $.ajax({method: 'GET', url: `stories?type=${type}&search=${search}`})
+        .fail(() => $('#stories .loading').text('There are no stories that match the search parameters.'))
+        .done(function(stories) {
+          if (stories.length === 0) {
+            $('#stories .loading').text('There are no stories that match the search parameters.');
+          } else {
+            $('#stories .loading').remove();
+            $('#stories').append(stories.map(story => storyArticle(story)));
+            stories.map(story => tagGenerator(story.tags, story._id));
+          }
+        });
+    } else {  // otherwise just display all the stories
+      $.ajax({method: 'GET', url: '/stories'})
+        .fail(() => $('#stories .loading').text('Could not load archive!'))
+        .done(function(stories) {
+          $('#stories .loading').remove();
+          $('#stories').append(stories.map(story => storyArticle(story)));
+          stories.map(story => tagGenerator(story.tags, story._id));
+        });
+    }
 
     $('#profile').on('click', function(event) {
       event.preventDefault();
@@ -125,6 +142,13 @@
         alert("You must have a profile to post a story.");
       }
     });
+
+    $('#searchNavigation').on('submit', function(event) {
+      event.preventDefault();
+      const type = $('#selector').val();
+      const search = $('#find').val();
+      $(location).attr('href', `?type=${type}&search=${search}`);
+    })
     </script>
   </body>
 </html>

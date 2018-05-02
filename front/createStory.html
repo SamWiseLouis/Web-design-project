@@ -24,13 +24,13 @@
     </div>
 
     <div id="chapterOptions" width="100%" class="mt-3">
-      <input id="chapter_title" class="text-center float-left" contenteditable="true" value="Chapter Title"></input>
+      <input id="chapter_title" class="text-center float-left mx-3" contenteditable="true" value="Chapter Title"></input>
     </div>
 
     <main id="page" class="mb-5">
       <div id="Chapter">
         <div id="currentChapter" contenteditable="true" overflow="auto"></div>
-        <button id="publish" class="btn btn-primary">Publish</button>
+        <button id="publish" class="btn btn-primary">Update Chapter</button>
       </div>
     </main>
 
@@ -43,17 +43,20 @@
     <script>
     const id = new URLSearchParams(window.location.search).get('id');
     const success = new URLSearchParams(window.location.search).get('success');
+    let chapters = 0;  // for keeping track of how many chapters there are
       // get the story by the id
       if (id) {
         if (success) {
-          $("#successText").text("Successfully submitted story.");
+          $("#successText").text("Successfully updated story.");
         }
-        $('#chapterOptions').append('<select id="chapterSelector" class="btn" background-color="#222426"><option value="" selected="true">Chapter 1</option></select><button id="chapterAdd" type="click" class="float-right btn btn-primary" >Add Chapter</button>');
+        $('#chapterOptions').append('<select id="chapterSelector" class="btn" background-color="#222426"><option value="" selected="true">Chapter 1</option></select><button id="chapterAdd" type="click" class="float-right btn btn-primary mx-3">Add Chapter</button><button id="chapterDelete" type="click" class="float-right btn btn-primary mx-3">Delete Chapter</button>');
+        $('#Chapter').append('<button id="delete" class="btn btn-primary">Delete Story</button>');
         $.ajax({method: 'GET', url: '/user'})
           .done(function(user) {
         if (user) {
           $.ajax({method: 'GET', url: `/stories/${id}`})
           .done(function(story){
+            chapters = story.chapters.length;
             $('#creatorHeader').text(story.title);
             $('#summary').val(story.summary);
             const chapterText = story.chapters[0].text;
@@ -68,37 +71,48 @@
               const selector = document.getElementById('chapterSelector');
               var x = selector.options.length + 1;
               const option = document.createElement('option');
-              option.value = option.text = ("Chapter"+" "+x);
+              option.value = x;
+              option.text = ("Chapter "+x);
               selector.add(option)
             }
           });
 
-          // can manually add new chapters
+          // can manually add new chapters, but only one at a time
           $('#chapterAdd').on('click', function() {
             const selector = document.getElementById('chapterSelector');
             var x = selector.options.length + 1;
             const option = document.createElement('option');
-            option.value = option.text = ("Chapter"+" "+x);
-            selector.add(option)
+            option.value = x;
+            option.text = ("Chapter " + x);
+            selector.add(option);
+            $('#chapter_title').val('Chapter Title');
+            $('#currentChapter').html('');
+            $(function() {
+              $('#chapterSelector').val(x);
+            });
+            $('#chapterAdd').remove();  // so they can't try to add more than one at once
+            chapters++;
           });
 
           // when a chapter is selected change the text box to the database.array[x] text
-          $('#chapterSelector').on('change', function(){
+          $('#chapterSelector').on('change', function() {
             const selector = $(this);
             $.ajax({method: 'GET', url: `/stories/${id}`})
             .done(function(story){
               var x = selector.prop("selectedIndex") + 1;
-              const chapterText = story.chapters[x-1].text;
-              const chapterTitle = story.chapters[x-1].title;
-              const text = chapterText.replace(/^\s+/mg, "<br/>");
-              $('#currentChapter').html('<pre>' + text + '</pre>');
-              $('#chapter_title').val(chapterTitle);
-
-              });
+              if (story.chapters[x-1]) {  // this isn't a new chapter
+                const chapterText = story.chapters[x-1].text;
+                const chapterTitle = story.chapters[x-1].title;
+                const text = chapterText.replace(/^\s+/mg, "<br/>");
+                $('#currentChapter').html('<pre>' + text + '</pre>');
+                $('#chapter_title').val(chapterTitle);
+              }
+            });
           });
 
           // when the publish button is clicked, save the new updated text to db
-          $('#publish').on('click', function(){
+          // updates can only be done one chapter at a time
+          $('#publish').on('click', function() {
             const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); // get the current updated text
             const chapterTitle = $('#chapter_title').val(); // get the curent chapter text
             const chapterIndex = $('#chapterSelector').prop("selectedIndex"); // get the chapter
@@ -111,62 +125,91 @@
               chapter_title: chapterTitle,
               story_title: storyTitle,
               summary: summary_text,
-              tags: tags_list
+              tags: tags_list,
+              length: chapters
             };
             $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
-              .done(() => alert('updated'))
               .fail(function() {
-                alert("Could not update story!");
+                alert("Could not update story.");
               })
               .done(function() {
                 $(location).attr('href', `createStory?id=${id}&success=true`);
               });
+            });
+            // delete a chapter
+            $('#chapterDelete').on('click', function() {
+              if (confirm('Delete this chapter and its comments permanently?')) {
+                const chapter = $('#chapterSelector').prop("selectedIndex");
+                const body = {
+                  user: {name: user.name, id: user.id},
+                  index: `chapters.${chapter}`
+                };
+                $.ajax({method: 'DELETE', url: `stories/${id}`, data: body})
+                  .fail(() => alert("Could not delete chapter."))
+                  .done(function(){
+                    $(location).attr('href', `createStory?id=${id}&success=true`);
+                  });
+              }
+            });
+
+            // delete the whole story
+            $('#delete').on('click', function() {
+              if (confirm('Delete this story and its comments permanently?')) {
+                const body = {
+                  user: {name: user.name, id: user.id}
+                };
+                $.ajax({method: 'DELETE', url: `stories/${id}`, data: body})
+                  .fail(() => alert("Could not delete story."))
+                  .done(function(){
+                    $(location).attr('href', `createStory`);
+                  });
+              }
             });
           } else {
             alert('Could not get story. User must be logged in to edit.');
           }
         });
       } else {  // they're making a new story
-      $.ajax({method: 'GET', url: '/user'})
-        .done(function(user) {
-          if (user) {  // make sure they're logged in
-            // we'll only let them start with one chapter for a new story
-            $('#chapterAdd').remove();
-            $('#chapterSelector').remove();
+        $.ajax({method: 'GET', url: '/user'})
+          .done(function(user) {
+            if (user) {  // make sure they're logged in
+              // we'll only let them start with one chapter for a new story
+              chapters = 1;
 
-            // when the publish button is clicked save the new updated text to db
-            $('#publish').on('click', function(){
-              const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); // get the current updated text
-              const chapterTitle = $('#chapter_title').val(); // get the curent chapter text
-              const storyTitle = $('#creatorHeader').text();
-              const summary_text = $('#summary').val();
-              const tags_list = $('#tags').tagsinput('items');
-              const updatebody = {
-                text: updatedText,
-                chapter_title: chapterTitle,
-                story_title: storyTitle,
-                summary: summary_text,
-                user: user,
-                tags: tags_list
-              };
-              $.ajax({method: 'POST', url: `/stories`, data: updatebody})
-                .fail(function() {
-                  alert("Could not post story!");
-                })
-                .done(function(story) {
-                  $.ajax({method: 'PATCH', url: `/profiles/${user.id}`, data: {story: story._id, user: user.id, name: user.name}})
-                    .fail(function() {
-                      alert("Could not post story!");
-                    })
-                    .done(function() {
-                      $("#successText").text("Successfully updated story.");
-                    });
+              // when the publish button is clicked, save the new updated text to db
+              $('#publish').on('click', function() {
+                const updatedText = $('#currentChapter').text().trim().replace(/\n/g, "<br/><br/>"); // get the current updated text
+                const chapterTitle = $('#chapter_title').val(); // get the curent chapter text
+                const storyTitle = $('#creatorHeader').text();
+                const summary_text = $('#summary').val();
+                const tags_list = $('#tags').tagsinput('items');
+                const updatebody = {
+                  text: updatedText,
+                  chapter_title: chapterTitle,
+                  story_title: storyTitle,
+                  summary: summary_text,
+                  user: user,
+                  tags: tags_list,
+                  length: chapters
+                };
+                $.ajax({method: 'POST', url: `/stories`, data: updatebody})
+                  .fail(function() {
+                    alert("Could not post story!");
+                  })
+                  .done(function(story) {
+                    $.ajax({method: 'PATCH', url: `/profiles/${user.id}`, data: {story: story._id, user: user.id, name: user.name}})
+                      .fail(function() {
+                        alert("Could not post story!");
+                      })
+                      .done(function() {
+                        $("#successText").text("Successfully submitted story.");
+                      });
+                  });
                 });
-              });
-          } else {
-            alert('User must be logged in to post a story.');
-          }
-        });
+            } else {
+              alert('User must be logged in to post a story.');
+            }
+          });
       }
     </script>
   </body>
