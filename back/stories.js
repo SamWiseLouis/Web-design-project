@@ -56,6 +56,7 @@ router.patch('/:id', function(request, response, next){
       }}, function(error, report) {
         if (error) return next(error);
         if (!report.matchedCount) return next(new Error('Not found'));
+
         response.end();
       });
     } else {

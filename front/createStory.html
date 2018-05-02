@@ -114,6 +114,7 @@
               tags: tags_list
             };
             $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
+              .done(() => alert('updated'))
               .fail(function() {
                 alert("Could not update story!");
               })

@@ -11,10 +11,6 @@ pre {
     white-space: pre-wrap;
 }
 
-#storytags li {
-  
-}
-
 #pageBody {
   border: thick solid purple;
   overflow: auto;
@@ -236,4 +232,13 @@ a:hover {
 }
 .bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+#storyFoot {
+  list-style: none;
+  margin: 0 2px;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+
 }
