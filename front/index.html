@@ -11,7 +11,6 @@
     <div id="headerHome">
       <h1 id="head" class="text-center display-3" width="100%"><b>The Hub</b></h1>
       <img src="https://media.giphy.com/media/K3kR9EZj8Uwk8/giphy.gif">
-
     </div>
     <div>
       <form id="navigation" class="my-2">
@@ -44,20 +43,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
 
-  // should show the title of the story
-  // the author of the story
-  // and a quick summary
-  // and show the genres of the story
+    // should show the title of the story
+    // the author of the story
+    // and a quick summary
+    // and show the genres of the story
     const storyArticle = function(story) {
-
       const article = $(`
         <article class="card my-3">
           <div id= "${story._id}" class="card-header">
             <a href="story?id=${story._id}">${story.title}</a>
             <span class="badge badge-pill badge-dark"><a href="profile?author=${story.author.id}">${story.author.name}</a></span>
           </div>
+          <div id="tags${story._id}" class="mt-3 mx-3"></div>
           <div class="card-body">
-            <p>${story.summary}</p>
+            <p class="border">${story.summary}</p>
           </div>
         </article>
       `);
@@ -66,6 +65,12 @@
         article.find('#editlink').remove();
       }
       return article;
+    };
+
+    const tagGenerator = function(tags_list, id) {
+      for (tag of tags_list) {
+        $(`#tags${id}`).append(`<li class="list-inline-item btn">${tag}</li>`);
+      }
     };
 
     // check if we're logged in
@@ -100,6 +105,7 @@
       .done(function(stories) {
         $('#stories .loading').remove();
         $('#stories').append(stories.map(story => storyArticle(story)));
+        stories.map(story => tagGenerator(story.tags, story._id));
       });
 
     $('#profile').on('click', function(event) {
@@ -118,8 +124,7 @@
       } else {
         alert("You must have a profile to post a story.");
       }
-    })
-
+    });
     </script>
   </body>
 </html>
