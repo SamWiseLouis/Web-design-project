@@ -9,7 +9,7 @@
   </head>
   <body class="container">
     <div id="headerHome">
-      <h1 id="head" class="text-center display-3" width="100%"><b>The Hub</b></h1>
+      <h1 id="head" class="text-center display-3" width="100%"><b><a class="headerlink" href="/">The Hub<a/></b></h1>
       <img src="https://media.giphy.com/media/K3kR9EZj8Uwk8/giphy.gif">
     </div>
     <div>
@@ -69,7 +69,7 @@
 
     const tagGenerator = function(tags_list, id) {
       for (tag of tags_list) {
-        $(`#tags${id}`).append(`<li class="list-inline-item btn">${tag}</li>`);
+        $(`#tags${id}`).append(`<li class="list-inline-item btn"><a class="taglink" href="?type=genre&search=${tag}">${tag}</a></li>`);
       }
     };
 

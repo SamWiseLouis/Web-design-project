@@ -148,6 +148,26 @@ a:hover {
   text-decoration: none;
 }
 
+.taglink {
+  color: white;
+  text-decoration: none;
+}
+
+.taglink:hover {
+  color: #8c1580;
+  text-decoration: none;
+}
+
+.headerlink {
+  color: white;
+  text-decoration: none;
+}
+
+.headerlink:hover {
+  color: #e2a8ff;
+  text-decoration: none;
+}
+
 .btn {
   background-color: #8c1580;
   border-color: #8c1580;
