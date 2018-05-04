@@ -32,12 +32,13 @@
     </main>
     <footer id="storyFoot" class="bg-dark fixed-bottom p-2">
       <a href="/" class="text-white float-left">Back to Archive</a>
-      <a id="commentslink" href="/comments?"} class="text-white float-right">View Comments</a>
+      <a href="comments?" id="log" class="text-white float-right">View Comments</a>
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     // Get the story ID for this page out of the URL
-    const story_id = new URLSearchParams(window.location.search).get('id');
+      const story_id = new URLSearchParams(window.location.search).get('id');
+      $('#log').attr('href', `/comment_page?story_id=${story_id}`);
     let chapter_number = new URLSearchParams(window.location.search).get('chapter');
     if (!chapter_number) {  // default to the first chapter
       chapter_number = '1';
