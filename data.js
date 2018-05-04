@@ -24,7 +24,6 @@ db.createCollection('comments', {validator: {$and: [
   {'author.id': {$type: 'string', $ne: ''}},  // will be 'anonymous' for anonymous users
   {'author.name': {$type: 'string', $ne: ''}},
   {story_id: {$type: 'objectId', $ne: ''}},
-  {index: {$type: 'integer'}},  // the chapter number the comment was posted on
   {text: {$type: 'string', $ne: ''}}
 ]}});
 
@@ -90,14 +89,12 @@ db.profiles.insertOne({
 db.comments.insertOne({
   author: {id: '100532274667147041257', name: 'Samuel Emerson'},
   story_id: long.insertedId,
-  index: 1,
   text: "I can't believe you've written two whole chapters!"
 });
 
 db.comments.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
   story_id: short.insertedId,
-  index: 0,
   text: "Short but sweet."
 });
 
