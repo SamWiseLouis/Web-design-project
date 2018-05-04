@@ -91,7 +91,7 @@ db.comments.insertOne({
   author: {id: '100532274667147041257', name: 'Samuel Emerson'},
   story_id: long.insertedId,
   index: 1,
-  text: "I can't believe you've written two whole chapters!"
+  text: "I can't believe you've written two whole chapters! ~ scarcasm"
 });
 
 db.comments.insertOne({
