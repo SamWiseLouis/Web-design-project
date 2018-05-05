@@ -39,15 +39,6 @@
       if (user) {
         $('#log').attr('href', '/logout').text('Log out'); // log out option
         $("#submitButton").prop('disabled', false); // allow the person to submit a new comment
-        // add delete links for user's own comments now that they're logged in
-        $.ajax({method: 'GET', url: `/comments/${story_id}`})
-          .done(function(comments) {
-            for (comment of comments){
-              if (user.id === comment.author.id) {  // only logged-in users should be able to delete their own comments
-                $(`#${comment._id}`).find('div').append('<a class="delete" href="#">[Delete]</a>');
-              }
-            }
-          });
       }
     });
 
@@ -83,14 +74,14 @@
         story: story_id,
         text: $('#argument').val().trim(),
         author: self
-        }
-        const form = this;
-        $.ajax({method: 'POST', url: '/comments', data: body})
-          .fail(() => alert("Failed to post comment."))
-          .done(function(comment) {
-            $('#other_comments').append(commentArticle(comment));
-            form.reset();
-          });
+      }
+      const form = this;
+      $.ajax({method: 'POST', url: '/comments', data: body})
+        .fail(() => alert("Failed to post comment."))
+        .done(function(comment) {
+          $('#other_comments').append(commentArticle(comment));
+          form.reset();
+        });
       });
 
       // Handle clicks on delete links
