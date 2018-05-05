@@ -139,7 +139,7 @@
             });
             // delete a chapter
             $('#chapterDelete').on('click', function() {
-              if (confirm('Delete this chapter and its comments permanently?')) {
+              if (confirm('Delete this chapter permanently?')) {
                 const chapter = $('#chapterSelector').prop("selectedIndex");
                 const body = {
                   user: {name: user.name, id: user.id},
