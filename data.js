@@ -74,53 +74,48 @@ const short = db.stories.insertOne({
   tags: ["Romance", "Comedy", "Parody"]
 });
 
-
-const short = db.stories.insertOne({
+const slong = db.stories.insertOne({
   author: {id: '100532274667147041257', name: 'Samuel Emerson'},
-  title: 'The Hub Constitution',
-  summary: "drama and lies from fool we despise.",
+  title: "Hub life",
+  summary: "still bitter",
   chapters: [
-    {title: 'Chapter 1', text: const short = db.stories.insertOne({
-      author: {id: '100532274667147041257', name: 'Samuel Emerson'},
-      title: 'Short Story',
-      summary: "Just read it.",
-      chapters: [
-        {title: 'Chapter 1', text: `Chapter Title
-Once there was a house of gamer's, happy and content.
-Then some of the gamer's decided they didn't like the others..... so they went out of their way to be mean,
-they didn't want these gamer's to change THEIR house.
-    So they were mean, and childish and petty.
-So when these people were seniors, they left, and housed elsewhere.
-But it didn't end there, the house still stood, and that they felt must change.
-Then the president of the house was removed, after failing to be an adult and do her job.
-And they blamed this on the other group, the group that was living in the house.
-So they didn't attend any house events, until someone they didn't like ran for house president.
-Then they pooled proxy votes to reduce people in the houses votes to useless, even though seniors should not be allowed to.
-And they voted one of their friends in.
-.... and those living in the house got over it.
-and so went on life.....
-Until one night someone decided that drama was lacking, on the eve of finals weeks..
-So the president resigned, claiming they were treated falsely with no real proof to show, a shock and a surprise, to all who didn't know,
-for who can read a mind? unless you tell them so, weather you are feeling distant, or included in this show?
-And so one president resigned, their loved one made a show,
-And posted to a list server, for everyone to know.
-And out of the shadows, the first president did slither, and spew out nasty comments, at those considered foes.
-For fuels ones own agenda, and playing victim still, unknown to groups a plotting, one person had stood still.
-Unmoved by all the drama, content with their own proof,
-and shown light upon a group chat, that made them look the fools.
-Without the victim card, theirs claims fell flat and false, their true words kept as proof,
-Rance did quite feel the rage, or a people falsely blamed.
-Though not at ending yet, for fools know not when to quit, first president tired again, and to list server went.
-...
- `
-      }],
-      length: 1,
-      tags: ["Romance", "Comedy", "Parody"]
-    });
-  }],
+    {title: 'Chapter 1', text:`
+    Once there was a house of gamer's, happy and content.
+    Then some of the gamer's decided they didn't like the others..... so they went out of their way to be mean,
+    they didn't want these gamer's to change THEIR house.
+        So they were mean, and childish and petty.
+    So when these people were seniors, they left, and housed elsewhere.
+    But it didn't end there, the house still stood, and that they felt must change.
+    Then the president of the house was removed, after failing to be an adult and do her job.
+    And they blamed this on the other group, the group that was living in the house.
+    So they didn't attend any house events, until someone they didn't like ran for house president.
+    Then they pooled proxy votes to reduce people in the houses votes to useless, even though seniors should not be allowed to.
+    And they voted one of their friends in.
+    .... and those living in the house got over it.
+    and so went on life.....
+    Until one night someone decided that drama was lacking, on the eve of finals weeks..
+    So the president resigned, claiming they were treated falsely with no real proof to show, a shock and a surprise, to all who didn't know,
+    for who can read a mind? unless you tell them so, weather you are feeling distant, or included in this show?
+    And so one president resigned, their loved one made a show,
+    And posted to a list server, for everyone to know.
+    And out of the shadows, the first president did slither, and spew out nasty comments, at those considered foes.
+    For fuels ones own agenda, and playing victim still, unknown to groups a plotting, one person had stood still.
+    Unmoved by all the drama, content with their own proof,
+    and shown light upon a group chat, that made them look the fools.
+    Without the victim card, theirs claims fell flat and false, their true words kept as proof,
+    Rance did quite feel the rage, or a people falsely blamed.
+    Though not at ending yet, for fools know not when to quit, first president tired again, and to list server went.
+    ...
+     `}],
   length: 1,
-  tags: ["Drama", "The House", "lies","LIES","LIIES", "LIIIIEEES"]
+  tags: ["The House", "Drama"]
 });
+
+
+
+
+
+
 
 db.profiles.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
