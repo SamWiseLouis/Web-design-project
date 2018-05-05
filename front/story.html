@@ -58,7 +58,7 @@
       if (chapter_number <= story.chapters.length) {
         $('#chapterTitle').append(chapter.title);
         const text = chapter.text.replace(/^\s+/mg, "<br/>");
-        $('#chapterText').append('<pre>' + text + '</pre>');
+        $('#chapterText').html('<pre>' + text + '</pre>');
       }
     };
 
