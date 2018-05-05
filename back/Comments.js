@@ -23,5 +23,23 @@ router.get('/:story_id', function(request, response, next) {
   })
 });
 
+// route to accept new posted comments
+router.post('/', function(request, response, next) {
+  if (!request.user) return next(new Error('Forbidden')); //checks to see that person is loged in, prevents command line hack
+    const comment ={
+    author: request.body.author,
+    story_id: request.body.story,
+    text: request.body.text
+    };
+    console.log(comment)
+
+  db.comments.insertMany(comment, function(error, profile) {
+    if (error) return next(error);
+    if (!profile) return next(new Error('Not found'));
+    response.json(comments);
+  });
+});
+
+
 
 module.exports = router;
