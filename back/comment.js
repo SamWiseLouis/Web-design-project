@@ -54,7 +54,7 @@ router.delete('/', function(request, response, next) {
 
   db.comments.deleteOne(comment, function(error) {
     if (error) return next(error);
-    response.end();
+    response.json(comment);
   });
 });
 
