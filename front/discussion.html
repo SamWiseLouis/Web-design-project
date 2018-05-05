@@ -11,7 +11,7 @@
         <h4 id="comment_header" class="card-header">New Comment</h4>
         <form id="commentSubmit" class="container my-2">
           <textarea id="argument" placeholder="What do you think?" class="form-control my-1" required></textarea>
-          <button id="submitButton" type="submit" class="btn btn-primary" disabled>Submit</button>
+          <button id="submitButton" type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
     <div id="other_comments">
@@ -38,7 +38,6 @@
       self = user;
       if (user) {
         $('#log').attr('href', '/logout').text('Log out'); // log out option
-        $("#submitButton").prop('disabled', false); // allow the person to submit a new comment
       }
     });
 
@@ -65,6 +64,9 @@
           if (!self || self.id !== comment.author.id) {  // only logged-in users should be able to delete their own comments
             $(`#${comment._id} .delete`).remove()
           }
+          if (comment.author.name === "Anonymous") {
+            $(`#${comment._id} a`).attr('href', '#');
+          }
         }
       });
 
@@ -75,11 +77,20 @@
         text: $('#argument').val().trim(),
         author: self
       }
+
+      if (!self) {
+        body.author = {name: "Anonymous", id: "Anonymous"};
+      }
+
       const form = this;
       $.ajax({method: 'POST', url: '/comments', data: body})
         .fail(() => alert("Failed to post comment."))
         .done(function(comment) {
           $('#other_comments').append(commentArticle(comment));
+          if (!self) {
+            $(`#${comment._id} .delete`).remove();
+            $(`#${comment._id} a`).attr('href', '#');
+          }
           form.reset();
         });
       });
