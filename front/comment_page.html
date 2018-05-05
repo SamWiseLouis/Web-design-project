@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link rel="stylesheet" href="commentStyle.css">
+  </head>
+  <body>
+    <div id="new_comment">
+        <div class="card" style="width: 30rem;">
+          <h4 id="comment_header" class="card-header">New Comment</h4>
+          <div id="stories" class="card-body my-2" style="width: 30rem;"></div>
+          <form id="commentSubmit" class="container mb-5">
+            <textarea id="argument" placeholder="What do you think?" class="form-control my-1" required></textarea>
+            <button id="submitButton" type="submit" class="btn btn-primary" disabled>Submit</button>
+          </form>
+        </div>
+    </div>
+    <div id="other_comments">
+      <h4 id="comment_header" class="card-header">Comments</h4>
+        <p class="loading">Loading comments...</p>
+    </div>
+  </body>
+  <footer id="links" class="bg-dark fixed-bottom p-2">
+    <a href="/story?" id="back" class="text-white float-left">Back</a>
+    <a href="/auth" id="log" class="text-white float-right">Log in with Google</a>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+
+  const story_id = new URLSearchParams(window.location.search).get('story_id');
+  $('#back').attr('href', `/story?id=${story_id}`);
+  console.log(story_id);
+  function goBack() {
+      window.history.back();
+  }
+
+  let self = null;
+  $.ajax({method: 'GET', url: '/user'})
+    .done(function(user) {
+      self = user;
+      if (user) {
+          $('#log').attr('href', '/logout').text('Log out'); //log out option
+        // need to allow user to remove own comments
+        // need to set self to user id
+        console.log(self);
+        $("#submitButton").prop('disabled', false); // allow the person to submit
+        }
+      });
+
+    //template for the comments that will be displayed // given ids so that they can be styled
+    const commentArticle = function(comment){
+      return $(`
+        <article>
+            <p id="comment_text">${comment.text}</p>
+            <span class="badge badge-pill badge-dark"><a href="profile?author=${comment.author.id}">${comment.author.name}</a></span>
+            <a class="delete" href="#">[Delete]</a>
+        </article>
+      `)};
+
+
+    $.ajax({method: 'GET', url: `/comments/${story_id}`})
+      .fail(() => $('#comments .loading').text('Could not load comments!'))
+      .done(function(comments) {
+        $('#other_comments .loading').remove();
+        $('#other_comments').append(comments.map(comment => commentArticle(comment)));
+        for(comment of comments){
+          if(self != comment.author){
+            $('.delete').remove()
+          }
+
+        }
+      });
+
+      $('#commentSubmit').on("submit", function(event){
+        event.preventDefault();
+        const body = {
+          story: story_id,
+          text: $('#argument').val().trim(),
+          author: self
+        };
+          const form = this;
+          console.log(body);
+          $.ajax({method: 'POST', url: '/comments', data: body})
+            .fail(() => alert("comment failed to post"))
+            .done(function(comment) {
+              $('#other_comments').append(commentArticle(comment));
+              form.reset();
+            });
+        });
+
+
+
+  </script>
+</html>

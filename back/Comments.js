@@ -36,7 +36,10 @@ router.post('/', function(request, response, next) {
     text: request.body.text
   };
 
+
+
   db.comments.insertOne(comment, function(error) {
+
     if (error) return next(error);
     response.json(comment);
   });
