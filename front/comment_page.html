@@ -79,7 +79,7 @@
           story: story_id,
           text: $('#argument').val().trim(),
           author: self
-          }
+        };
           const form = this;
           console.log(body);
           $.ajax({method: 'POST', url: '/comments', data: body})

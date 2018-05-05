@@ -33,7 +33,7 @@ router.post('/', function(request, response, next) {
     };
     console.log(comment)
 
-  db.comments.insertMany(comment, function(error, profile) {
+  db.comments.insertOne(comment, function(error, profile) {
     if (error) return next(error);
     if (!profile) return next(new Error('Not found'));
     response.json(comments);
