@@ -25,21 +25,39 @@ router.get('/:story_id', function(request, response, next) {
 
 // route to accept new posted comments
 router.post('/', function(request, response, next) {
-  if (!request.user) return next(new Error('Forbidden')); //checks to see that person is loged in, prevents command line hack
-    const comment ={
-    author: request.body.author,
-    story_id: request.body.story,
-    text: request.body.text
-    };
-    console.log(comment)
+  // access control: user must be logged in
+  if (!request.user) return next(new Error('Forbidden'));
+  // access control: user must be the author of the comment
+  if (request.user.id !== request.body.author.id) return next(new Error('Forbidden'));
 
-  db.comments.insertMany(comment, function(error, profile) {
+  const comment = {
+    author: request.body.author,
+    story_id: new mongodb.ObjectId(request.body.story),
+    text: request.body.text
+  };
+
+  db.comments.insertOne(comment, function(error) {
     if (error) return next(error);
-    if (!profile) return next(new Error('Not found'));
-    response.json(comments);
+    response.json(comment);
   });
 });
 
+// route to delete a comment
+router.delete('/', function(request, response, next) {
+  // access control: user must be logged in
+  if (!request.user) return next(new Error('Forbidden'));
+  // access control: user must be the author of the comment
+  if (request.user.id !== request.body.user) return next(new Error('Forbidden'));
 
+  const comment = {
+    'author.id': request.body.user,
+    story_id: new mongodb.ObjectId(request.body.story)
+  };
+
+  db.comments.deleteOne(comment, function(error) {
+    if (error) return next(error);
+    response.end();
+  });
+});
 
 module.exports = router;
