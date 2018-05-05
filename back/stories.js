@@ -110,7 +110,7 @@ router.post('/', function(request, response, next) {
       author: {id: request.body.user.id, name: request.body.user.name},
       chapters: [{title: request.body.chapter_title, text: request.body.text}],
       tags: request.body.tags,
-      length: request.body.tags.length
+      length: request.body.length
     };
 
     db.stories.insertOne(story, function(error) {

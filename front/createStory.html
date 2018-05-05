@@ -179,7 +179,7 @@
 
               // when the publish button is clicked, save the new updated text to db
               $('#publish').on('click', function() {
-                const updatedText = $('#currentChapter pre').html().trim().replace(/\n/g, "<br/><br/>"); // get the current updated text
+                const updatedText = $('#currentChapter').html().trim().replace(/\n/g, "<br/><br/>"); // get the current updated text
                 const chapterTitle = $('#chapter_title').val(); // get the curent chapter text
                 const storyTitle = $('#creatorHeader').text();
                 const summary_text = $('#summary').val();
