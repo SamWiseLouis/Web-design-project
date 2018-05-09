@@ -74,14 +74,6 @@ const short = db.stories.insertOne({
   tags: ["Romance", "Comedy", "Parody"]
 });
 
-
-
-
-
-
-
-
-
 db.profiles.insertOne({
   author: {id: '103655908568409015936', name: 'Guinevere Gilman'},
   desc: "This is my profile. I don't have much to say, because my stories should speak for themselves. I only have one so far, but it's pretty amazing.",

@@ -26,6 +26,7 @@ router.get('/:story_id', function(request, response, next) {
 // route to accept new posted comments
 router.post('/', function(request, response, next) {
   // access control: user must be the author of the comment (if not anonymous)
+  if (!request.user && request.body.author.name !== "Anonymous") return next(new Error('Forbidden'));
   if (request.user && request.user.id !== request.body.author.id) return next(new Error('Forbidden'));
 
   const comment = {

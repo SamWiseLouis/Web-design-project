@@ -65,33 +65,19 @@ router.patch('/:id', function(request, response, next){
       return next(Error('Forbidden'));
     }
     // here we're safe to update it
-    if (request.body.index > -1){
-      db.stories.updateOne(story_id,  // update includes a chapter update
-        {$set: {
-          ['chapters.' + request.body.index + '.text']: request.body.text,
-          ['chapters.' + request.body.index + '.title']: request.body.chapter_title,
-          title: request.body.story_title,
-          summary: request.body.summary,
-          tags: request.body.tags,
-          length: request.body.length
-      }}, function(error, report) {
-        if (error) return next(error);
-        if (!report.matchedCount) return next(new Error('Not found'));
-        response.end();
-      });
-    } else {
-      db.stories.updateOne(story_id,  // update is only for the title or summary
-        {$set: {
-          title: request.body.story_title,
-          summary: request.body.summary,
-          tags: request.body.tags,
-          length: request.body.length
-      }}, function(error, report) {
-        if (error) return next(error);
-        if (!report.matchedCount) return next(new Error('Not found'));
-        response.end();
-      });
-    }
+    db.stories.updateOne(story_id,  // update includes a chapter update
+      {$set: {
+        ['chapters.' + request.body.index + '.text']: request.body.text,
+        ['chapters.' + request.body.index + '.title']: request.body.chapter_title,
+        title: request.body.story_title,
+        summary: request.body.summary,
+        tags: request.body.tags,
+        length: request.body.length
+    }}, function(error, report) {
+      if (error) return next(error);
+      if (!report.matchedCount) return next(new Error('Not found'));
+      response.end();
+    });
   });
 });
 
