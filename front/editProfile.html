@@ -53,6 +53,10 @@
                   $('#name').val(profile.author.name);
                   $('#desc').text(profile.desc);
                 });
+            } else if (id && type === "new") {
+              // the user is making a new profile, and the username has to start as their google account name
+              $("#name").val(user.name);
+              $("#name").attr('disabled', true);
             }
           }
         }
