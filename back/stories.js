@@ -84,7 +84,7 @@ router.patch('/:id', function(request, response, next){
 router.post('/', function(request, response, next) {
   if (!request.user) return next(new Error('Forbidden'));  // access control: user must be logged in
   // access control: user must be the author of the new story
-  if (request.user.id != request.body.user.id || request.user.name != request.body.user.name) return next(new Error('Forbidden'));
+  if (request.user.id != request.body.user.id) return next(new Error('Forbidden'));
   // access control: user must already have a profile to post a story
   db.profiles.findOne({'author.id': request.body.user.id}, function(error, profile) {
     if (error) return next(error);

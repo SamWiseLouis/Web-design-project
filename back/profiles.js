@@ -9,6 +9,8 @@ mongodb.MongoClient.connect('mongodb://localhost:27017', function(error, client)
   if (error) throw error;
   db = client.db('fiction');
   db.profiles = db.collection('profiles');
+  db.stories = db.collection('stories');
+  db.comments = db.collection('comments');
 });
 
 // get profile by user id
@@ -46,6 +48,18 @@ router.patch('/:id', function(request, response, next) {
   db.profiles.updateOne(profile, update, function(error, report) {
     if (error) return next(error);
     if (!report.matchedCount) return next(new Error('Not found'));
+    response.end();
+  });
+
+  // we also have to update their stories to have their new username
+  db.stories.updateMany({'author.id': request.params.id}, {$set: {'author.name': request.body.name}}, function(error, stories) {
+    if (error) return next(error);
+    response.end();
+  });
+
+  // and their comments
+  db.comments.updateMany({'author.id': request.params.id}, {$set: {'author.name': request.body.name}}, function(error, stories) {
+    if (error) return next(error);
     response.end();
   });
 });

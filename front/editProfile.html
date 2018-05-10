@@ -47,10 +47,10 @@
           $('#log').attr('href', '/logout').text('Log out');
           $('#new :input').prop('disabled', false);
           if (id === user.id) {
-            $('#name').val(user.name);
             if (id && !type) {
               $.ajax({method: 'GET', url: `/profiles/${id}`})
                 .done(function(profile) {
+                  $('#name').val(profile.author.name);
                   $('#desc').text(profile.desc);
                 });
             }

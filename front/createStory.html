@@ -44,6 +44,7 @@
     const id = new URLSearchParams(window.location.search).get('id');
     const success = new URLSearchParams(window.location.search).get('success');
     let chapters = 0;  // for keeping track of how many chapters there are
+    let newChapter = false;  // for keeping track of if they add a chapter
       // get the story by the id
       if (id) {
         if (success) {
@@ -79,6 +80,7 @@
 
           // can manually add new chapters, but only one at a time
           $('#chapterAdd').on('click', function() {
+            newChapter = true;
             const selector = document.getElementById('chapterSelector');
             var x = selector.options.length + 1;
             const option = document.createElement('option');
@@ -113,7 +115,19 @@
           // when the publish button is clicked, save the new updated text to db
           // updates can only be done one chapter at a time
           $('#publish').on('click', function() {
-            const updatedText = $('#currentChapter pre').html().trim().replace(/\n/g, "<br/>"); // get the current updated text
+            let updatedText = '';
+            if (newChapter) {
+              updatedText = $('#currentChapter').html().trim().replace(/\n/g, "<br/><br/>");
+            } else {
+              let count = 0;
+              $('#currentChapter pre').each(function() {
+                  if (count !== 0) {
+                    updatedText += '<br/><br/>';
+                  }
+                  updatedText += $(this).html().trim().replace(/\n/g, "<br/>"); // get the current updated text
+                  count++;
+              });
+            }
             const chapterTitle = $('#chapter_title').val(); // get the curent chapter text
             const chapterIndex = $('#chapterSelector').prop("selectedIndex"); // get the chapter
             const storyTitle = $('#creatorHeader').text();
