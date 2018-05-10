@@ -31,7 +31,7 @@ router.patch('/:id', function(request, response, next) {
   const profile = {'author.id': request.params.id};
 
   if (request.body.story) {
-    update = {$push: {story_ids: request.body.story}};
+    update = {$push: {story_ids: new mongodb.ObjectId(request.body.story)}};
   } else if (request.body.name && request.body.desc) {
     update = {$set: {
       'author.name': request.body.name,
@@ -73,8 +73,7 @@ router.post('/', function(request, response, next) {
       return next(new Error('Forbidden'));
     } else {
       // access control: user must be the author of the new profile
-      if (request.user.id != request.body.user || request.user.name != request.body.name) return next(new Error('Forbidden'));
-
+      if (request.user.id !== request.body.user) return next(new Error('Forbidden'));
         const profile = {
           author: {id: request.body.user, name: request.body.name},
           desc: request.body.desc,
