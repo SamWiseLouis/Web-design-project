@@ -136,23 +136,27 @@
             const storyTitle = $('#creatorHeader').text();
             const summary_text = $('#summary').val();
             const tags_list = $("#tags").tagsinput('items');
-            const updatebody = {
-              index: chapterIndex,
-              text: updatedText,
-              chapter_title: chapterTitle,
-              story_title: storyTitle,
-              summary: summary_text,
-              tags: tags_list,
-              length: chapters
-            };
+            if (!updatedText || !chapterTitle || !storyTitle || !summary_text || tags_list.length === 0) {
+              alert("Please fill out all of the fields to submit.");
+            } else {
+              const updatebody = {
+                index: chapterIndex,
+                text: updatedText,
+                chapter_title: chapterTitle,
+                story_title: storyTitle,
+                summary: summary_text,
+                tags: tags_list,
+                length: chapters
+              };
 
-            $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
-              .fail(function() {
-                alert("Could not update story.");
-              })
-              .done(function() {
-                $(location).attr('href', `createStory?id=${id}&success=true`);
-              });
+              $.ajax({method: 'PATCH', url: `/stories/${id}`, data: updatebody})
+                .fail(function() {
+                  alert("Could not update story.");
+                })
+                .done(function() {
+                  $(location).attr('href', `createStory?id=${id}&success=true`);
+                });
+              }
             });
             // delete a chapter
             $('#chapterDelete').on('click', function() {
@@ -201,28 +205,32 @@
                 const storyTitle = $('#creatorHeader').text();
                 const summary_text = $('#summary').val();
                 const tags_list = $('#tags').tagsinput('items');
-                const updatebody = {
-                  text: updatedText,
-                  chapter_title: chapterTitle,
-                  story_title: storyTitle,
-                  summary: summary_text,
-                  user: user,
-                  tags: tags_list,
-                  length: chapters
-                };
-                $.ajax({method: 'POST', url: `/stories`, data: updatebody})
-                  .fail(function() {
-                    alert("Could not post story!");
-                  })
-                  .done(function(story) {
-                    $.ajax({method: 'PATCH', url: `/profiles/${user.id}`, data: {story: story._id, user: user.id, name: user.name}})
-                      .fail(function() {
-                        alert("Could not post story!");
-                      })
-                      .done(function() {
-                        $("#successText").text("Successfully submitted story.");
-                      });
-                  });
+                if (!updatedText || !chapterTitle || !storyTitle || !summary_text || tags_list.length === 0) {
+                  alert("Please fill out all of the fields to submit.");
+                } else {
+                  const updatebody = {
+                    text: updatedText,
+                    chapter_title: chapterTitle,
+                    story_title: storyTitle,
+                    summary: summary_text,
+                    user: user,
+                    tags: tags_list,
+                    length: chapters
+                  };
+                  $.ajax({method: 'POST', url: `/stories`, data: updatebody})
+                    .fail(function() {
+                      alert("Could not post story!");
+                    })
+                    .done(function(story) {
+                      $.ajax({method: 'PATCH', url: `/profiles/${user.id}`, data: {story: story._id, user: user.id, name: user.name}})
+                        .fail(function() {
+                          alert("Could not post story!");
+                        })
+                        .done(function() {
+                          $(location).attr('href', `story?id=${story._id}`);
+                        });
+                    });
+                  }
                 });
             } else {
               alert('User must be logged in to post a story.');
