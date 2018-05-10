@@ -60,14 +60,14 @@
       .done(function(comments) {
         $('#other_comments .loading').remove();
         $('#other_comments').append(comments.map(comment => commentArticle(comment)));
-        for (comment of comments){
+        for (comment of comments) {
           if (!self || self.id !== comment.author.id) {  // only logged-in users should be able to delete their own comments
             $(`#${comment._id} .delete`).remove();
           }
           if (comment.author.name === "Anonymous") {
             $(`#${comment._id} a`).attr('href', '#');
           }
-          if (comment.author.id === self.id) {
+          if (self && comment.author.id === self.id) {
             $(`#${comment._id} .delete`).remove();  // in case it's already there
             $(`#${comment._id}`).find('div').append('<a class="delete" href="#">[Delete]</a>');
           }
