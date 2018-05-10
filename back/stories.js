@@ -10,6 +10,7 @@ mongodb.MongoClient.connect('mongodb://localhost:27017', function(error, client)
   db = client.db('fiction');
   db.stories = db.collection('stories');
   db.profiles = db.collection('profiles');
+  db.comments = db.collection('comments');
 });
 
 // get the stories
@@ -131,6 +132,16 @@ router.delete('/:id', function(request, response, next) {
       });
     } else {  // for if we have to delete the whole story
       db.stories.deleteOne(story_id, function(error) {
+        if (error) return next(error);
+        response.end();
+      });
+      // also delete all comments related to this story
+      db.comments.deleteMany({story_id: story_id}, function(error) {
+        if (error) return next(error);
+        response.end();
+      });
+      // also delete it from their profile
+      db.profiles.updateOne({'author.id': request.body.user.id}, {$pull: {story_ids: new mongodb.ObjectId(request.params.id)}}, function(error) {
         if (error) return next(error);
         response.end();
       });

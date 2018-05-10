@@ -58,6 +58,9 @@
           $.ajax({method: 'GET', url: `/stories/${id}`})
           .done(function(story){
             chapters = story.chapters.length;
+            if (chapters === 1) {  // user can't delete the chapter if it's the only one
+              $('#chapterDelete').remove();
+            }
             $('#creatorHeader').text(story.title);
             $('#summary').val(story.summary);
             const chapterText = story.chapters[0].text;
@@ -175,7 +178,7 @@
                 };
                 $.ajax({method: 'DELETE', url: `stories/${id}`, data: body})
                   .fail(() => alert("Could not delete story."))
-                  .done(function(){
+                  .done(function() {
                     $(location).attr('href', `createStory`);
                   });
               }
